@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title *ngIf="type == '1'">Login</ion-title>
+    <ion-title *ngIf="type == '2'">Crear cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+
+
+
+  <form #formulario="ngForm">
+ 
+    <ion-item>
+      <ion-label>Email:</ion-label>
+      <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="userSign.email"
+        pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Password:</ion-label>
+      <ion-input type="password" name="password" [(ngModel)]="userSign.password" required placeholder="Contraseña">
+      </ion-input>
+    </ion-item>
+
+
+
+
+
+
+  </form>
+
+ 
+    
+    <ion-button color="primary"  *ngIf="type == '1'" shape="round" (click)="login()" expand="full">login</ion-button>
+    <ion-button color="primary"  *ngIf="type == '2'"[disabled]="formulario.invalid" shape="round" (click)="enviar()" expand="full">Enviar</ion-button>
+    <ion-button color="google"   shape="round" (click)="loginGoogle()" expand="full">login with Google</ion-button>
+    <ion-button color="facebook"   shape="round" (click)="loginFacebook()" expand="full">login with facebook</ion-button>
+
+    <ion-button color="danger" (click)="cancelar()" shape="round" expand="full">Cancelar</ion-button>
+  
+
+</ion-content>
