@@ -41,7 +41,7 @@ export class ModalPage implements OnInit {
     const auth = firebase.default.auth();
     auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
       
-
+      
       this.modalCtrl.dismiss({
         userCredential
       });
@@ -87,7 +87,11 @@ export class ModalPage implements OnInit {
     const provider = new firebase.default.auth.GoogleAuthProvider();
     const db = firebase.default.database();
     auth.signInWithPopup(provider).then(result => {
-      this.modalCtrl.dismiss();
+      console.log(result.additionalUserInfo.profile);
+      var profile = result.additionalUserInfo.profile;
+      this.modalCtrl.dismiss({
+        profile
+      });
  
       let user = result.user;
       let date = new Date().toString();
@@ -112,7 +116,7 @@ export class ModalPage implements OnInit {
     const db = firebase.default.database();
     auth.signInWithPopup(provider).then(result => {
       this.modalCtrl.dismiss();
- 
+      console.log(result);
       let user = result.user;
       let date = new Date().toString();
       const newSign = {

@@ -1,5 +1,5 @@
 export interface UserSign {
-    nickname:string,
+    nickname: string,
     email: string,
     password: string,
     date: string
@@ -10,3 +10,6 @@ export interface UserSignData {
     dateSignOut: string,
     emailSignIn: string
 }
+
+
+ 

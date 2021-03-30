@@ -12,13 +12,16 @@
     </ion-buttons>
 
 
-
-
-    <ion-title color="primary" class="ion-text-center ion-text-capitalize">INICIO</ion-title>
+    <ion-chip class="ion-text-center">
+      <ion-avatar>
+        <!-- <img src="./assets/img/avatar.jpg"> -->
+        <img src="assets/img/logo/thunderlikes-1.png">
+      </ion-avatar>
+    </ion-chip>
     <ion-buttons slot="end">
       <!-- (click)="mostrarMenu()" -->
 
-      <app-logger></app-logger>
+      <app-logger (userEmit)="verUser( $event )"></app-logger>
 
     </ion-buttons>
   </ion-toolbar>
@@ -26,11 +29,50 @@
 
 <ion-content [fullscreen]="true">
 
-  <app-segments></app-segments>
+  <!-- <app-segments></app-segments> -->
 
-  <ion-list *ngIf="userSignData">
+  <ion-slides pager="ios" *ngIf="!user" class="slide-full">
 
-    <ion-item-sliding *ngFor="let user of userSignData  ">
+    <ion-slide *ngFor="let slide of slides">
+
+      <ion-card mode="ios">
+        <img [src]="slide.img" class="slide-image" />
+
+        <ion-card-header>
+          <ion-card-subtitle>{{ slide.titulo }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          {{ slide.desc }}
+        </ion-card-content>
+
+      </ion-card>
+
+
+    </ion-slide>
+
+
+    <ion-slide > 
+      <ion-card mode="ios">
+        <img src="assets/img/bussines/comenzar.png" class="slide-image"  (click)="onClick()"/>
+
+        <ion-card-header (click)="onClick()">
+          <ion-card-subtitle>Inicia</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          Dinos que publicación quieres subir y te ayudamos
+        </ion-card-content>
+
+      </ion-card>
+    </ion-slide>
+
+
+  </ion-slides>
+
+  <ion-list *ngIf="user">
+
+    <ion-item-sliding *ngFor="let dataUser of userSignData  ">
 
       <ion-item-options side="start">
         <ion-item-option>
@@ -43,11 +85,11 @@
 
       <ion-item>
         <ion-label>
-          <h3>{{ user.emailSignIn }}</h3>
+          <h3>{{ dataUser.emailSignIn }}</h3>
 
         </ion-label>
-        {{ user.dateSignIn }}
-        <ion-label slot="end" class="ion-text-end text-small"> {{ user.dateSignOut}} </ion-label>
+        {{ dataUser.dateSignIn }}
+        <ion-label slot="end" class="ion-text-end text-small"> {{ dataUser.dateSignOut}} </ion-label>
 
       </ion-item>
 
