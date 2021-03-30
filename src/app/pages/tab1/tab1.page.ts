@@ -44,6 +44,7 @@ export class Tab1Page {
     }
   ];
   user: any;
+  loadding: Boolean = false;
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private router: Router) {
@@ -58,10 +59,11 @@ export class Tab1Page {
 
   ngOnInit() {
     console.log(this.user);
+    this.loadding = true;
     const auth = firebase.default.auth();
     const db = firebase.default.database();
     const fs = firebase.default.firestore();
-
+    // this.loadding = true;
     auth.onAuthStateChanged(user => {
       if (user) {
         this.loginCheck = true;
@@ -73,35 +75,44 @@ export class Tab1Page {
             snapshot.docs.forEach(doc => {
               console.log(doc.data());
               this.userSignData.push(doc.data());
+              this.loadding = false;
             })
           })
       } else {
 
         this.userSignData = null;
         this.loginCheck = false;
+        this.loadding = false;
       }
-    })
+    });
+    this.loadding = false;
 
   }
 
   onClick() {
+    this.loadding = true;
     const user = JSON.parse(localStorage.getItem("user"));
     console.log("entro a inicio");
     if (user === null) {
       console.log("no existe user");
+      this.loadding = false;
+      this.router.navigate(['/register']);
     } else {
 
       console.log("existe user", user);
-      this.router.navigate( ['/add-publications'] );
+      this.router.navigate(['/add-publications']);
+      this.loadding = false;
     }
     console.log("ternimo a inicio");
   }
   verUser(event) {
+
     console.log(event)
     this.user = event.user;
+    this.loadding = event.loadding;
     this.userSignData = event.userSignData;
-    this.router.navigate( ['/add-publications'] );
-    console.log(this.user, this.userSignData);
+    this.router.navigate(['/add-publications']);
+    console.log(this.user, this.userSignData, this.loadding);
 
   }
 

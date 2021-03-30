@@ -5,6 +5,7 @@ import { UserSign } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import * as admin from "firebase-admin";
 import { environment } from '../../../environments/environment.prod';
+import { Router } from '@angular/router';
 
 
 
@@ -22,7 +23,8 @@ export class LoggerComponent implements OnInit {
   user: any = {};
   @Output() userEmit: EventEmitter<any>;
   constructor(private modalCtrl: ModalController,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private router: Router) {
     this.userEmit = new EventEmitter();
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -50,12 +52,20 @@ export class LoggerComponent implements OnInit {
 
     auth.onAuthStateChanged(user => {
       console.log(user);
+      let url =   this.router.url;
+      console.log(url);
       if (user !== null) {
         this.user = user;
         localStorage.setItem("user", JSON.stringify(user));
 
       } else {
+        localStorage.removeItem("user");
         this.user = undefined;
+        this.emitNull();
+        if(url !=="/register"){
+          this.router.navigate(['/']);
+        }
+        
       }
 
 
@@ -117,11 +127,11 @@ export class LoggerComponent implements OnInit {
     localStorage.removeItem("user");
     const auth = firebase.default.auth();
     auth.signOut().then(() => {
-      let emit = {
-        user: null ,
-        userSignData: null
-      }
-      this.userEmit.emit(emit);
+
+      this.emitNull();
+
+      localStorage.removeItem("user");
+      this.router.navigate(['/'])
     });
   }
   async presentAlert(type, data: any) {
@@ -149,6 +159,18 @@ export class LoggerComponent implements OnInit {
 
 
 
+  }
+
+
+
+  emitNull() {
+    let emit = {
+      user: null,
+      userSignData: null,
+      loadding:false
+    }
+
+    this.userEmit.emit(emit);
   }
 
 }

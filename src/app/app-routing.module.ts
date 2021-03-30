@@ -12,6 +12,10 @@ const routes: Routes = [
   },  {
     path: 'add-publications',
     loadChildren: () => import('./pages/add-publications/add-publications.module').then( m => m.AddPublicationsPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   }
 
 ]; 

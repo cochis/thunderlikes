@@ -1,0 +1,52 @@
+<form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
+
+
+
+
+  <ion-item>
+    <ion-label>Nombre:</ion-label>
+    <ion-input type="text" placeholder="Nombre" name="name" [(ngModel)]="user.name" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Apeidos:</ion-label>
+    <ion-input type="text" placeholder="Apeidos" name="lastname" [(ngModel)]="user.lastname" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Email:</ion-label>
+    <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="user.email"
+      pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Fecha de Nacimiento</ion-label>
+    <ion-datetime displayFormat="DD MMM YYYY" placeholder="Selecciona fecha" name="dateBirth"
+      [(ngModel)]="user.dateBirth"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Descripción</ion-label>
+    <ion-textarea name="description" [(ngModel)]="user.description"></ion-textarea>
+  </ion-item>
+
+
+  <ion-button [disabled]="formulario.invalid" class="ion-margin-top" type="submit" expand="block">
+    Registrar
+  </ion-button>
+
+
+
+</form>
+
+
+
+<ion-item-divider color="tertiary" class="ion-margin ion-justify-content-center" style="margin: auto;
+margin-top: 30px;
+margin-bottom: 30px;text-align:center;">
+  <ion-label style="margin-left: auto; margin-right: auto;">
+    -- o --
+  </ion-label>
+</ion-item-divider>
+
+
+
+
+<ion-button color="google" shape="round" (click)="registerGoogle()" expand="full">Registro con Google</ion-button>
+<ion-button color="facebook" shape="round" (click)="registerFacebook()" expand="full">Registro con Facebook</ion-button>
