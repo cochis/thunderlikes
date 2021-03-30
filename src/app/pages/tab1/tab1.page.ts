@@ -45,6 +45,10 @@ export class Tab1Page {
   ];
   user: any;
   loadding: Boolean = false;
+
+
+
+
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private router: Router) {
@@ -78,6 +82,22 @@ export class Tab1Page {
               this.loadding = false;
             })
           })
+
+
+        const doc = fs.collection('UsersSignIn');
+          
+        const observer = doc.onSnapshot(docSnapshot => {
+          this.userSignData=[];
+          docSnapshot.forEach(doc =>{
+            console.log(doc.data());
+            this.userSignData.push(doc.data());
+          });
+          
+          // this.userSignData = docSnapshot.data();
+          // ...
+        }, err => {
+          console.log(`Encountered error: ${err}`);
+        });
       } else {
 
         this.userSignData = null;
@@ -100,7 +120,7 @@ export class Tab1Page {
     } else {
 
       console.log("existe user", user);
-      this.router.navigate(['/add-publications']);
+      // this.router.navigate(['/add-publications']);
       this.loadding = false;
     }
     console.log("ternimo a inicio");
@@ -111,7 +131,7 @@ export class Tab1Page {
     this.user = event.user;
     this.loadding = event.loadding;
     this.userSignData = event.userSignData;
-    this.router.navigate(['/add-publications']);
+    // this.router.navigate(['/add-publications']);
     console.log(this.user, this.userSignData, this.loadding);
 
   }
