@@ -1,3 +1,4 @@
+ 
 <ion-header class="ion-no-border">
   <ion-toolbar color="dark">
 
@@ -26,46 +27,46 @@
 
 <ion-content class="ion-padding-top">
   <app-loading *ngIf="loadding"></app-loading>
-  <ion-grid fixed >
+  <ion-grid fixed>
     <ion-row>
-      <ion-col size="12" >
-        
-       
-  <ion-slides pager=" ios" *ngIf="!user" class="slide-full ">
-
-        <ion-slide *ngFor="let slide of slides" >
-
-          <ion-card mode="ios" style="padding-top: 35px;">
-            <img [src]="slide.img" class="slide-image" />
-
-            <ion-card-header>
-              <ion-card-subtitle>{{ slide.titulo }}</ion-card-subtitle>
-            </ion-card-header>
-
-            <ion-card-content>
-              {{ slide.desc }}
-            </ion-card-content>
-
-          </ion-card>
+      <ion-col size="12">
 
 
-        </ion-slide>
+        <ion-slides pager=" ios" *ngIf="!user" class="slide-full ">
+
+          <ion-slide *ngFor="let slide of slides">
+
+            <ion-card mode="ios" style="padding-top: 35px;">
+              <img [src]="slide.img" class="slide-image" />
+
+              <ion-card-header>
+                <ion-card-subtitle>{{ slide.titulo }}</ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                {{ slide.desc }}
+              </ion-card-content>
+
+            </ion-card>
 
 
-        <ion-slide>
-          <ion-card mode="ios" style="padding-top: 35px;">
-            <img src="assets/img/bussines/comenzar.png" class="slide-image" (click)="onClick()" />
+          </ion-slide>
 
-            <ion-card-header (click)="onClick()">
-              <ion-card-subtitle>Inicia</ion-card-subtitle>
-            </ion-card-header>
 
-            <ion-card-content>
-              Dinos que publicación quieres subir y te ayudamos
-            </ion-card-content>
+          <ion-slide>
+            <ion-card mode="ios" style="padding-top: 35px;">
+              <img src="assets/img/bussines/comenzar.png" class="slide-image" (click)="onClick()" />
 
-          </ion-card>
-        </ion-slide>
+              <ion-card-header (click)="onClick()">
+                <ion-card-subtitle>Inicia</ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                Dinos que publicación quieres subir y te ayudamos
+              </ion-card-content>
+
+            </ion-card>
+          </ion-slide>
 
 
         </ion-slides>
@@ -102,10 +103,12 @@
           </ion-item-sliding>
 
 
-
         </ion-list>
 
-        <div class="fb-like" data-href="https://www.facebook.com/SolteroF10/photos/a.177058337356571/179116393817432/" data-width="200" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
+
+        <div class="fb-like" data-href="https://www.facebook.com/photo?fbid=2531352277173298&amp;set=a.1453196991655504"
+          data-width="100%" data-layout="standard" data-action="like" data-size="large" data-share="true"></div>
+
       </ion-col>
     </ion-row>
   </ion-grid>
