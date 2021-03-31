@@ -1,4 +1,7 @@
- 
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1"
+  nonce="Rz2JwBgx"></script>
 <ion-header class="ion-no-border">
   <ion-toolbar color="dark">
 
@@ -32,7 +35,7 @@
       <ion-col size="12">
 
 
-        <ion-slides pager=" ios" *ngIf="!user" class="slide-full ">
+        <!-- <ion-slides pager=" ios" *ngIf="!user" class="slide-full ">
 
           <ion-slide *ngFor="let slide of slides">
 
@@ -69,9 +72,9 @@
           </ion-slide>
 
 
-        </ion-slides>
+        </ion-slides> -->
 
-        <ion-list *ngIf="user">
+        <!-- <ion-list *ngIf="user">
 
           <ion-item-sliding *ngFor="let dataUser of userSignData  ">
 
@@ -103,15 +106,69 @@
           </ion-item-sliding>
 
 
-        </ion-list>
+        </ion-list> -->
 
 
-        <div class="fb-like" data-href="https://www.facebook.com/photo?fbid=2531352277173298&amp;set=a.1453196991655504"
-          data-width="100%" data-layout="standard" data-action="like" data-size="large" data-share="true"></div>
+
+      </ion-col>
+
+
+    </ion-row>
+  </ion-grid>
+
+  <!-- <div *ngFor="let post1 of postsToLike">
+  <label for="{{post1.idUser}}">{{post1.urlPostToLike}}</label>
+
+
+  <div class="fb-post" data-href="'post1.urlPostToLike'" data-width="100%" data-show-text="true"></div>
+</div> -->
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12" size-lg="3" size-md="4" size-sm="6" *ngFor="let item of test">
+        <ion-card-header>
+          <div class="fb-share-button" data-href="https://www.facebook.com/zazhil.meneses/posts/4210181115679276"
+            data-layout="button_count" data-size="large"><a target="_blank"
+              href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Fzazhil.meneses%2Fposts%2F4210181115679276&amp;src=sdkpreparse"
+              class="fb-xfbml-parse-ignore">Compartir</a></div>
+        </ion-card-header>
+        <ion-card-content style="overflow: hidden !important;">
+          <div class="fb-post" data-href="https://www.facebook.com/zazhil.meneses/posts/4210181115679276"
+            data-width="350" data-show-text="false"></div>
+        </ion-card-content>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid fixed *ngIf="flagPost">
+    <ion-row>
+      <ion-col size="12" size-lg="3" size-md="4" size-sm="6" *ngFor="let post of postToLike">
+        <ion-card-header>
+          <div class="fb-share-button" data-href="post.urlPostToLike" data-layout="button_count" data-size="large"><a
+              target="_blank"
+              href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Fzazhil.meneses%2Fposts%2F4210181115679276&amp;src=sdkpreparse"
+              class="fb-xfbml-parse-ignore">Compartir</a></div>
+
+
+        </ion-card-header>
+        <ion-card-content style="overflow: hidden !important;">
+          <div class="fb-post" data-href="post.urlPostToLike" data-width="350" data-show-text="false"></div>
+
+
+        </ion-card-content>
+
+
+
 
       </ion-col>
     </ion-row>
   </ion-grid>
+  <!-- 
+  <div id="postFB" *ngFor="let post of postToLike">
+    {{post.urlPostToLike}}
+    <div class="fb-post" data-href="'post.urlPostToLike'" data-width="100%" data-show-text="true"></div>
+  </div> -->
+
   <!-- <app-segments></app-segments> -->
 
 </ion-content>

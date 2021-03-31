@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
-import { UserSign, UserSignData } from '../../interfaces/interfaces';
+import { UserSign, UserSignData, PostToLike } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import * as admin from "firebase-admin";
 import { environment } from '../../../environments/environment.prod';
 import { Router } from '@angular/router';
-
+import { Platform } from '@ionic/angular';
+import { ServicesFirebase } from 'src/app/services/servicesFirebase';
 
 
 @Component({
@@ -20,7 +21,12 @@ export class Tab1Page {
   userSignData: any[] = [];
   firebaseConfig;
   loginCheck: Boolean = false;
-
+  postToLike: any;
+  postsToLikes: any;
+  postsToLike: any[] = [];
+  test = [1, 1];
+  lengthPost: number = 0;
+  flagPost : Boolean= false;
   slides: { img: string, titulo: string, desc: string }[] = [
     {
       img: '/assets/img/logo/thunderlikes-1.png',
@@ -45,13 +51,14 @@ export class Tab1Page {
   ];
   user: any;
   loadding: Boolean = false;
-
+  inner = "";
 
 
 
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
-    private router: Router) {
+    private router: Router,
+    private servicesFB: ServicesFirebase) {
 
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -62,7 +69,7 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-    console.log(this.user);
+    // console.log(this.user);
     this.loadding = true;
     const auth = firebase.default.auth();
     const db = firebase.default.database();
@@ -72,32 +79,61 @@ export class Tab1Page {
       if (user) {
         this.loginCheck = true;
 
-        this.userSignData = [];
-        fs.collection('UsersSignIn').get()
-          .then((snapshot) => {
+        // this.userSignData = [];
+        // fs.collection('UsersSignIn').get()
+        //   .then((snapshot) => {
 
-            snapshot.docs.forEach(doc => {
-              console.log(doc.data());
-              this.userSignData.push(doc.data());
-              this.loadding = false;
-            })
-          })
+        //     snapshot.docs.forEach(doc => {
+        //       console.log(doc.data());
+        //       this.userSignData.push(doc.data());
+        //       this.loadding = false;
+        //     })
+        //   })
 
 
-        const doc = fs.collection('UsersSignIn');
-          
+        // const doc = fs.collection('UsersSignIn');
+
+        // const observer = doc.onSnapshot(docSnapshot => {
+        //   this.postsToLike = [];
+        //   docSnapshot.forEach(doc => {
+        //     console.log(doc.data());
+        //     this.userSignData.push(doc.data());
+        //   });
+
+        //   // this.userSignData = docSnapshot.data();
+        //   // ...
+        // }, err => {
+        //   console.log(`Encountered error: ${err}`);
+        // });
+        // var divPost = document.getElementById("postFB");
+
+
+
+        const doc = fs.collection('postToLike');
+
         const observer = doc.onSnapshot(docSnapshot => {
-          this.userSignData=[];
-          docSnapshot.forEach(doc =>{
+          this.postsToLikes = [];
+          this.postToLike = [];
+
+          docSnapshot.forEach(doc => {
             console.log(doc.data());
-            this.userSignData.push(doc.data());
+            this.postToLike.push(doc.data());
           });
-          
-          // this.userSignData = docSnapshot.data();
-          // ...
+          this.flagPost = true;
+          console.log(this.postToLike, this.postToLike.length);
+         
         }, err => {
           console.log(`Encountered error: ${err}`);
         });
+
+
+        console.log(this.test, this.test.length);
+        
+
+
+
+
+       this.postToLike = this.servicesFB.getPostToLike();
       } else {
 
         this.userSignData = null;
@@ -112,29 +148,30 @@ export class Tab1Page {
   onClick() {
     this.loadding = true;
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("entro a inicio");
+    // console.log("entro a inicio");
     if (user === null) {
-      console.log("no existe user");
+      // console.log("no existe user");
       this.loadding = false;
       this.router.navigate(['/register']);
     } else {
 
-      console.log("existe user", user);
+      // console.log("existe user", user);
       // this.router.navigate(['/add-publications']);
       this.loadding = false;
     }
-    console.log("ternimo a inicio");
+    // console.log("ternimo a inicio");
   }
   verUser(event) {
 
-    console.log(event)
+    // console.log(event)
     this.user = event.user;
     this.loadding = event.loadding;
     this.userSignData = event.userSignData;
     // this.router.navigate(['/add-publications']);
-    console.log(this.user, this.userSignData, this.loadding);
+    // console.log(this.user, this.userSignData, this.loadding);
 
   }
+
 
 
 }

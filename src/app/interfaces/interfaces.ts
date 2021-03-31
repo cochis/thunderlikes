@@ -21,6 +21,15 @@ export interface UserSignData {
     dateSignOut: string,
     emailSignIn: string
 }
+export interface PostToLike {
+    idUser: string,
+    idPlattform: string,
+    requires: string,
+    urlPostToLike: string,
+    datePostEnd: string,
+    dateCreatePostToLike: string,
+    dateEditPostToLike: string 
+}
 
 
  
