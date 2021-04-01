@@ -24,7 +24,7 @@ export class Tab1Page {
   postToLike: any;
   postsToLikes: any;
   postsToLike: any[] = [];
-  test = [1, 1];
+  test = [1,1];
   lengthPost: number = 0;
   flagPost : Boolean= false;
   slides: { img: string, titulo: string, desc: string }[] = [
@@ -69,7 +69,7 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-    // console.log(this.user);
+     console.log('*_* init',this.user);
     this.loadding = true;
     const auth = firebase.default.auth();
     const db = firebase.default.database();
@@ -111,29 +111,39 @@ export class Tab1Page {
 
         const doc = fs.collection('postToLike');
 
-        const observer = doc.onSnapshot(docSnapshot => {
+        doc.onSnapshot(docSnapshot => {
           this.postsToLikes = [];
           this.postToLike = [];
 
-          docSnapshot.forEach(doc => {
-            console.log(doc.data());
-            this.postToLike.push(doc.data());
+          var tem: any = [];
+          docSnapshot.forEach(docc => {
+            tem.push(docc.data());
           });
           this.flagPost = true;
-          console.log(this.postToLike, this.postToLike.length);
-         
+          this.postToLike = tem;
+          console.log('*_* posttolike: ', this.postToLike, tem);
+
+          setTimeout(() => {
+            for(let i = 0; i < this.postToLike.length; i++){
+              console.log('*_* for: ', this.postToLike[i]);
+              document.getElementById("algo" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
+              document.getElementById("algo1" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
+            }
+            this.scriptFB();
+          }, 1000);
+
         }, err => {
           console.log(`Encountered error: ${err}`);
         });
 
 
         console.log(this.test, this.test.length);
-        
 
 
 
 
-       this.postToLike = this.servicesFB.getPostToLike();
+
+       //this.postToLike = this.servicesFB.getPostToLike();
       } else {
 
         this.userSignData = null;
@@ -142,7 +152,16 @@ export class Tab1Page {
       }
     });
     this.loadding = false;
+        
 
+  }
+
+  scriptFB(){
+    var script = document.createElement("script");
+    script.src = "https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
   }
 
   onClick() {
