@@ -58,7 +58,8 @@ export class Tab1Page {
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private router: Router,
-    private servicesFB: ServicesFirebase) {
+    private servicesFB: ServicesFirebase,
+    ) {
 
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -152,7 +153,7 @@ export class Tab1Page {
       }
     });
     this.loadding = false;
-        
+
 
   }
 

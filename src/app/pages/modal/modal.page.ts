@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { UserSign } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
-
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-modal',
@@ -16,7 +16,10 @@ export class ModalPage implements OnInit {
   @Input() type: String;
   auth: any;
   firebaseConfig;
-  constructor(private modalCtrl: ModalController) {
+  constructor(
+      private modalCtrl: ModalController,
+      private _auth: AuthService
+    ) {
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
       firebase.default.initializeApp(this.firebaseConfig);
@@ -34,28 +37,42 @@ export class ModalPage implements OnInit {
   }
 
   enviar() {
-   
-    let email = this.userSign.email;
-    let password = this.userSign.password;
 
-    const auth = firebase.default.auth();
-    auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
-      
-      
+    this._auth.createUser(this.userSign).then(response => {
       this.modalCtrl.dismiss({
-        userCredential
+        response
       });
-    }).catch((error) => {
+    }).catch(error => {
       var errorCode = error.code;
-      var errorMessage = error.message;
-      this.modalCtrl.dismiss({
-        error
-      });
-    });;
+       var errorMessage = error.message;
+       this.modalCtrl.dismiss({
+         error
+       });
+    });
+    /**
+     *
+     let email = this.userSign.email;
+     let password = this.userSign.password;
+
+     const auth = firebase.default.auth();
+     auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
+
+
+       this.modalCtrl.dismiss({
+         userCredential
+       });
+     }).catch((error) => {
+       var errorCode = error.code;
+       var errorMessage = error.message;
+       this.modalCtrl.dismiss({
+         error
+       });
+     });;
+     */
 
   }
   login() {
-   
+
     let emailSignIn = this.userSign.email;
     let password = this.userSign.password;
     let dateSignIn = this.userSign.date;
@@ -92,7 +109,7 @@ export class ModalPage implements OnInit {
       this.modalCtrl.dismiss({
         profile
       });
- 
+
       let user = result.user;
       let date = new Date().toString();
       const newSign = {
@@ -100,9 +117,9 @@ export class ModalPage implements OnInit {
         dateSingIn: date,
         dateSingOut: ""
       }
-     
+
       db.ref('UsersSignIn').push(newSign).then(newUser => {
-      
+
       }).catch(err => {
         console.log(err);
       });
@@ -124,9 +141,9 @@ export class ModalPage implements OnInit {
         dateSingIn: date,
         dateSingOut: ""
       }
-      
+
       db.ref('UsersSignIn').push(newSign).then(newUser => {
-        
+
       }).catch(err => {
         console.log(err);
       });
