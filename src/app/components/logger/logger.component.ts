@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import * as admin from "firebase-admin";
 import { environment } from '../../../environments/environment.prod';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 
@@ -25,7 +26,9 @@ export class LoggerComponent implements OnInit {
   @Output() userEmit: EventEmitter<any>;
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
-    private router: Router) {
+    private router: Router,
+    private _auth: AuthService
+    ) {
     this.userEmit = new EventEmitter();
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -92,7 +95,7 @@ export class LoggerComponent implements OnInit {
       console.log(url);
       if (user !== null) {
         // this.user = user;
-        localStorage.setItem("user", JSON.stringify(user));
+        //localStorage.setItem("user", JSON.stringify(user));
 
       } else {
         localStorage.removeItem("user");
@@ -165,16 +168,24 @@ export class LoggerComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.removeItem("user");
-    const auth = firebase.default.auth();
-    auth.signOut().then(() => {
-
+    this._auth.logout().then(data => {
+      localStorage.clear();
       this.emitNull();
+      this.router.navigate(['/']);
+    })
 
-      localStorage.removeItem("user");
-      this.router.navigate(['/'])
-    });
+    /**
+     const auth = firebase.default.auth();
+     auth.signOut().then(() => {
+
+       this.emitNull();
+
+       localStorage.removeItem("user");
+     });
+     *
+     */
   }
+
   async presentAlert(type, data: any) {
     if (type == "danger") {
 

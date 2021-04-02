@@ -44,19 +44,4 @@ export class FirebaseService {
     return collection.valueChanges();
   }
 
-  login(user) {
-    console.log(user);
-    const auth = firebase.default.auth();
-    const db = firebase.default.database();
-    auth.signInWithEmailAndPassword(user.email, user.password).then(userCredential => {
-
-      console.log(userCredential);
-
-    }).catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-
-    });;
-  }
-
 }

@@ -70,7 +70,7 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-  
+
     console.log('*_* init', this.user);
     this.loadding = true;
     const auth = firebase.default.auth();
@@ -82,26 +82,26 @@ export class Tab1Page {
         const doc = fs.collection('postToLike');
         this.serviceFb.getCollection("/PostToLike").subscribe(res => {
 
-          this.revome();
           this.postToLike = res;
           console.log(this.postToLike);
           this.flagPost = true;
           console.log('*_* posttolike: ', this.postToLike);
           setTimeout(() => {
             for (let i = 0; i < this.postToLike.length; i++) {
-    
+
               console.log('*_* for: ', this.postToLike[i].urlPostToLike);
               console.log(document.getElementById("algo" + i));
-    
+
               document.getElementById("algo" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
               document.getElementById("algo1" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
             }
-            this.scriptFB();
+          this.revome();
+
           }, 1000);
         },
           error => {
             console.log(error);
-    
+
           })
       } else {
         this.userSignData = null;
@@ -112,6 +112,8 @@ export class Tab1Page {
     this.loadding = false;
   }
   scriptFB() {
+    console.log('scripot fb');
+
     var script = document.createElement("script");
     script.src = "https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1";
     script.async = true;
@@ -121,10 +123,17 @@ export class Tab1Page {
   }
 
   revome() {
-    var headFacebook = document.getElementById("headFacebook");
-    if (headFacebook) {
-      headFacebook.remove();
-    }
+    const scriptList = document.querySelectorAll("script")
+    console.log('*_* scripts', scriptList);
+
+    const convertedNodeList = Array.from(scriptList)
+    const testScript = convertedNodeList.find(script => script.id === "headFacebook")
+    console.log('*_* scripts 2', testScript);
+    testScript?.parentNode.removeChild(testScript)
+
+    setTimeout(() => {
+      this.scriptFB();
+    }, 1000);
 
   }
 
