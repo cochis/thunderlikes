@@ -44,7 +44,7 @@ export class FirebaseService {
     return collection.valueChanges();
   }
 
-  login(user) {
+  createUser(user) {
     console.log(user);
     const auth = firebase.default.auth();
     const db = firebase.default.database();

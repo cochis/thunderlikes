@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { FunctionService } from '../../services/functions';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
+
+ 
 @Component({
   selector: 'app-form-user',
   templateUrl: './form-user.component.html',

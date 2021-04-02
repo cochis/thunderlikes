@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { ServicesFirebase } from 'src/app/services/servicesFirebase';
 import { FirebaseService } from '../../services/firebase.service';
+import * as SecureLS from 'secure-ls';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class Tab1Page {
   test = [1, 1];
   lengthPost: number = 0;
   flagPost: Boolean = false;
+  LS = new SecureLS({ encodingType: 'AES' });
   slides: { img: string, titulo: string, desc: string }[] = [
     {
       img: '/assets/img/logo/thunderlikes-1.png',
@@ -70,7 +72,7 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-  
+
     console.log('*_* init', this.user);
     this.loadding = true;
     const auth = firebase.default.auth();
@@ -85,14 +87,16 @@ export class Tab1Page {
           this.revome();
           this.postToLike = res;
           console.log(this.postToLike);
+          // this.LS.set("post", this.postToLike);
+          localStorage.setItem("pLoIsKtEtO",JSON.stringify(this.postToLike));
           this.flagPost = true;
-          console.log('*_* posttolike: ', this.postToLike);
+
           setTimeout(() => {
             for (let i = 0; i < this.postToLike.length; i++) {
-    
+
               console.log('*_* for: ', this.postToLike[i].urlPostToLike);
               console.log(document.getElementById("algo" + i));
-    
+
               document.getElementById("algo" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
               document.getElementById("algo1" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
             }
@@ -101,7 +105,7 @@ export class Tab1Page {
         },
           error => {
             console.log(error);
-    
+
           })
       } else {
         this.userSignData = null;
@@ -116,15 +120,15 @@ export class Tab1Page {
     script.src = "https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1";
     script.async = true;
     script.defer = true;
-    script.id = "headFacebook"
+    script.id = "headFacebook";
     document.head.appendChild(script);
   }
 
   revome() {
-    var headFacebook = document.getElementById("headFacebook");
-    if (headFacebook) {
-      headFacebook.remove();
-    }
+    const scriptList = document.querySelectorAll("script")
+    const convertedNodeList = Array.from(scriptList)
+    const testScript = convertedNodeList.find(script => script.id === "headFacebook")
+    testScript?.parentNode.removeChild(testScript)
 
   }
 

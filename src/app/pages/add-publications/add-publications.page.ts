@@ -36,9 +36,9 @@ export class AddPublicationsPage implements OnInit {
   }
   onSubmit(formulario: NgForm) {
     var date = new Date;
-    this.postToLike.dateCreatePostToLike = this.funtionSv.convertBeautifulDate(date);
-    this.postToLike.dateEditPostToLike = this.funtionSv.convertBeautifulDate(date);
-    this.postToLike.datePostEnd = this.funtionSv.convertBeautifulDate(date);
+    this.postToLike.dateCreatePostToLike = date.getTime().toString();
+    this.postToLike.dateEditPostToLike = date.getTime().toString();
+    this.postToLike.datePostEnd =  date.getTime().toString();
     let id  = this.serviceFb.getId();
  
     
