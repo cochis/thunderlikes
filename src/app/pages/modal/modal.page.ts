@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { UserSign } from '../../interfaces/interfaces';
+import { UserSign, User } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
@@ -13,6 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ModalPage implements OnInit {
 
   @Input() userSign: UserSign;
+  @Input() user: User;
   @Input() type: String;
   auth: any;
   firebaseConfig;
@@ -73,31 +74,45 @@ export class ModalPage implements OnInit {
   }
   login() {
 
-    let emailSignIn = this.userSign.email;
-    let password = this.userSign.password;
-    let dateSignIn = this.userSign.date;
 
-
-    const auth = firebase.default.auth();
-    const db = firebase.default.database();
-    auth.signInWithEmailAndPassword(emailSignIn, password).then(userCredential => {
-      const newSign = {
-        emailSignIn: emailSignIn,
-        dateSingIn: dateSignIn,
-        dateSingOut: ""
-      }
-      db.ref('UsersSignIn').push(newSign);
-
+    this._auth.login(this.userSign).catch(data => {
       this.modalCtrl.dismiss({
-        userCredential
+        data
       });
-    }).catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+    }).then(error => {
       this.modalCtrl.dismiss({
         error
       });
-    });;
+    });
+
+    /**
+     *
+     let emailSignIn = this.userSign.email;
+     let password = this.userSign.password;
+     let dateSignIn = this.userSign.date;
+
+
+     const auth = firebase.default.auth();
+     const db = firebase.default.database();
+     auth.signInWithEmailAndPassword(emailSignIn, password).then(userCredential => {
+       const newSign = {
+         emailSignIn: emailSignIn,
+         dateSingIn: dateSignIn,
+         dateSingOut: ""
+       }
+ //      db.ref('UsersSignIn').push(newSign);
+
+       this.modalCtrl.dismiss({
+         userCredential
+       });
+     }).catch((error) => {
+       var errorCode = error.code;
+       var errorMessage = error.message;
+       this.modalCtrl.dismiss({
+         error
+       });
+     });;
+     */
   }
   loginGoogle() {
     const auth = firebase.default.auth();

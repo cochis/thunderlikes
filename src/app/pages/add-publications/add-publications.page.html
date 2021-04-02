@@ -3,20 +3,15 @@
 <ion-content [fullscreen]="true">
   <app-segments></app-segments>
   <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
-
-    <ion-list-header>
-      <ion-label>Formulario válido: {{ formulario.valid }}</ion-label>
-    </ion-list-header>
-
-
     <ion-item>
       <ion-label>Usuario:</ion-label>
-      <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="usuario.email" required></ion-input>
+      <ion-input type="text" placeholder="Usuario" name="idUser" [(ngModel)]="postToLike.idUser" required></ion-input>
     </ion-item>
-
+  
+  
     <ion-item>
       <ion-label>Plataforma:</ion-label>
-      <ion-select placeholder="Select One">
+      <ion-select placeholder="Select One"   name="idPlattform" [(ngModel)]="postToLike.idPlattform" required>
         <ion-select-option value="fb">Facebook</ion-select-option>
         <ion-select-option value="yt">Youtube</ion-select-option>
         <ion-select-option value="ig">Instagram</ion-select-option>
@@ -26,7 +21,7 @@
     <ion-item>
       <ion-label>Requerimientos:</ion-label>
       <!-- Checkbox Colors -->
-      <ion-select multiple="true" cancelText="Cancelar" okText="Aceptar">
+      <ion-select multiple="true" cancelText="Cancelar" okText="Aceptar"  name="requires" [(ngModel)]="postToLike.requires" required>
         <ion-select-option value="lk">Like</ion-select-option>
         <ion-select-option value="cm">Comentar</ion-select-option>
         <ion-select-option value="sh">Compartir</ion-select-option>
@@ -35,7 +30,7 @@
     </ion-item>
     <ion-item>
       <ion-label>URL:</ion-label>
-      <ion-input type="url" placeholder="Email" name="email" [(ngModel)]="usuario.email" required></ion-input>
+      <ion-input type="url" placeholder="Dirección" name="urlPostToLike" [(ngModel)]="postToLike.urlPostToLike" required></ion-input>
     </ion-item>
 
 

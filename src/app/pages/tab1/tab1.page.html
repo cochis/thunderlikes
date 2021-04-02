@@ -35,7 +35,7 @@
       <ion-col size="12">
 
 
-        <!-- <ion-slides pager=" ios" *ngIf="!user" class="slide-full ">
+        <ion-slides pager=" ios" *ngIf="!user" class="slide-full ">
 
           <ion-slide *ngFor="let slide of slides">
 
@@ -72,7 +72,7 @@
           </ion-slide>
 
 
-        </ion-slides> -->
+        </ion-slides>
 
         <!-- <ion-list *ngIf="user">
 
@@ -126,14 +126,21 @@
     <ion-row>
       <ion-col size="12" size-lg="3" size-md="4" size-sm="6" *ngFor="let item of postToLike; index as i">
         <ion-card-header>
-          <div class="fb-share-button" [id]="'algo'+ i"
-            data-layout="button_count" data-size="large"><a target="_blank"
+          <div class="fb-share-button" [id]="'algo'+ i" data-layout="button_count" data-size="large"><a target="_blank"
               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Fzazhil.meneses%2Fposts%2F4210181115679276&amp;src=sdkpreparse"
               class="fb-xfbml-parse-ignore">Compartir</a></div>
+
+              <div class="fb-like" 
+              data-href="https://www.facebook.com/photo.php?fbid=104570254973161" 
+              data-width=""
+              data-layout="standard" 
+              data-action="like" 
+              data-size="small"  
+              data-share="true">
+         </div>  
         </ion-card-header>
-        <ion-card-content style="overflow: hidden !important;">
-          <div class="fb-post" [id]="'algo1' + i"
-            data-width="350" data-show-text="false"></div>
+        <ion-card-content style="overflow: hidden !important;" height="250px">
+          <div class="fb-post" [id]="'algo1' + i" data-width="350" data-show-text="false"></div>
         </ion-card-content>
       </ion-col>
     </ion-row>

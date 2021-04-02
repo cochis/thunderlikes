@@ -1,11 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModalPage } from '../../pages/modal/modal.page';
-import { UserSign } from '../../interfaces/interfaces';
+import { UserSign, User } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import * as admin from "firebase-admin";
 import { environment } from '../../../environments/environment.prod';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 
@@ -16,15 +17,18 @@ import { Router } from '@angular/router';
 })
 export class LoggerComponent implements OnInit {
   userSign: UserSign;
+  user: User;
   typeLog: String;
   userSignData: any[] = [];
   firebaseConfig;
   loginCheck: Boolean = false;
-  user: any = {};
+  flagPhoto = false ;
   @Output() userEmit: EventEmitter<any>;
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
-    private router: Router) {
+    private router: Router,
+    private _auth: AuthService
+    ) {
     this.userEmit = new EventEmitter();
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -44,6 +48,20 @@ export class LoggerComponent implements OnInit {
       password: "123456",
       date: new Date().toDateString()
     }
+    this.user = {
+      uid: "",
+      displayName: "",
+      name: "",
+      lastname: "",
+      email: "",
+      password: "",
+      idRole: "",
+      dateBirth: "",
+      description: "",
+      dateCreated: "",
+      dateEdit: "",
+      getPostLikes: ""
+    }
 
     // const auth = admin.auth();
     const auth = firebase.default.auth();
@@ -51,21 +69,42 @@ export class LoggerComponent implements OnInit {
     const fs = firebase.default.firestore();
 
     auth.onAuthStateChanged(user => {
+
+      let url = this.router.url;
+
       console.log(user);
-      let url =   this.router.url;
+
+      if(user.photoURL == null){
+        this.flagPhoto=true;
+      }
+      this.user = {
+        uid: user.uid,
+        displayName: user.displayName,
+        name: user.displayName,
+        lastname: "",
+        email: user.uid,
+        password: "",
+        idRole: user.uid,
+        dateBirth: user.uid,
+        description: user.uid,
+        dateCreated: "",
+        dateEdit: "",
+        getPostLikes: ""
+      }
+
       console.log(url);
       if (user !== null) {
-        this.user = user;
-        localStorage.setItem("user", JSON.stringify(user));
+        // this.user = user;
+        //localStorage.setItem("user", JSON.stringify(user));
 
       } else {
         localStorage.removeItem("user");
         this.user = undefined;
         this.emitNull();
-        if(url !=="/register"){
+        if (url !== "/register") {
           this.router.navigate(['/']);
         }
-        
+
       }
 
 
@@ -95,45 +134,58 @@ export class LoggerComponent implements OnInit {
     })
   }
   async mostrarModal(type) {
-    let userSign = this.userSign;
 
-    const modal = await this.modalCtrl.create({
-      component: ModalPage,
-      componentProps: {
-        userSign,
-        type
+    if (type == "2") {
+      this.router.navigate(['/register']);
+    } else {
+      let userSign = this.userSign;
+      const modal = await this.modalCtrl.create({
+        component: ModalPage,
+        componentProps: {
+          userSign,
+          type
+        }
+      });
+
+      await modal.present();
+
+      const { data } = await modal.onDidDismiss();
+      // const  data  = await modal.onWillDismiss();
+      console.log(data);
+
+
+      if (data !== undefined) {
+        if (data.error) {
+          this.presentAlert("danger", data.error);
+        } else {
+          this.presentAlert("success", data);
+        }
       }
-    });
 
-    await modal.present();
-
-    const { data } = await modal.onDidDismiss();
-    // const  data  = await modal.onWillDismiss();
-    console.log(data);
-
-
-    if (data !== undefined) {
-      if (data.error) {
-        this.presentAlert("danger", data.error);
-      } else {
-        this.presentAlert("success", data);
-      }
     }
 
 
   }
 
   logOut() {
-    localStorage.removeItem("user");
-    const auth = firebase.default.auth();
-    auth.signOut().then(() => {
-
+    this._auth.logout().then(data => {
+      localStorage.clear();
       this.emitNull();
+      this.router.navigate(['/']);
+    })
 
-      localStorage.removeItem("user");
-      this.router.navigate(['/'])
-    });
+    /**
+     const auth = firebase.default.auth();
+     auth.signOut().then(() => {
+
+       this.emitNull();
+
+       localStorage.removeItem("user");
+     });
+     *
+     */
   }
+
   async presentAlert(type, data: any) {
     if (type == "danger") {
 
@@ -167,7 +219,7 @@ export class LoggerComponent implements OnInit {
     let emit = {
       user: null,
       userSignData: null,
-      loadding:false
+      loadding: false
     }
 
     this.userEmit.emit(emit);

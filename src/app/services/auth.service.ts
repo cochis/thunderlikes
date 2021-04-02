@@ -10,8 +10,16 @@ export class AuthService {
 
   constructor() {}
 
+  async login(userModel): Promise<any> {
+    return await this.auth.signInWithEmailAndPassword(userModel.email, userModel.password);
+  }
+
   async createUser(user){
     return await this.auth.createUserWithEmailAndPassword(user.email, user.password);
+  }
+
+  async logout(): Promise<any>{
+    return await this.auth.signOut();
   }
 
 

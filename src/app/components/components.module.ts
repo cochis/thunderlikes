@@ -8,6 +8,7 @@ import { FormUserComponent } from './form-user/form-user.component';
 import { FormsModule } from '@angular/forms';
 import { LoadingComponent } from './loading/loading.component';
 import { FunctionService } from '../services/functions';
+import { ServicesFirebase } from '../services/servicesFirebase';
 
 
 @NgModule({
@@ -31,6 +32,8 @@ import { FunctionService } from '../services/functions';
     FormsModule
   ],
   providers:
-    [FunctionService]
+    [FunctionService,
+    ServicesFirebase
+    ]
 })
 export class ComponentsModule { }
