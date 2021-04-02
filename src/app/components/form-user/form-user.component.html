@@ -1,8 +1,4 @@
 <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
-
-
-
-
   <ion-item>
     <ion-label>Nombre:</ion-label>
     <ion-input type="text" placeholder="Nombre" name="name" [(ngModel)]="user.name" required></ion-input>
@@ -16,6 +12,15 @@
     <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="user.email"
       pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required></ion-input>
   </ion-item>
+
+  <ion-item>
+    <ion-label>Password:</ion-label>
+    <ion-input type="password" name="password" [(ngModel)]="user.password" required placeholder="Contraseña">
+    </ion-input>
+  </ion-item>
+
+
+
   <ion-item>
     <ion-label>Fecha de Nacimiento</ion-label>
     <ion-datetime displayFormat="DD MMM YYYY" placeholder="Selecciona fecha" name="dateBirth"
@@ -46,7 +51,23 @@ margin-bottom: 30px;text-align:center;">
 </ion-item-divider>
 
 
+<ion-grid fixed>
+  <ion-row>
+    <ion-col size="6" size-lg="6" size-md="6" size-sm="6">
+      <ion-button color="google" shape="round" (click)="registerGoogle()" expand="full">Google</ion-button>
+    </ion-col>
+    <ion-col size="6" size-lg="6" size-md="6" size-sm="6">
+      <ion-button color="facebook" shape="round" (click)="registerFacebook()" expand="full">Facebook
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <ion-button color="danger" (click)="cancelar()" shape="round" expand="full" class="ion-margin-top">Cancelar
+      </ion-button>
+    </ion-col>
+
+  </ion-row>
 
 
-<ion-button color="google" shape="round" (click)="registerGoogle()" expand="full">Registro con Google</ion-button>
-<ion-button color="facebook" shape="round" (click)="registerFacebook()" expand="full">Registro con Facebook</ion-button>
+</ion-grid>

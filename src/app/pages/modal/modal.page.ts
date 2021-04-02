@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { UserSign } from '../../interfaces/interfaces';
+import { UserSign, User } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
 
@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 export class ModalPage implements OnInit {
 
   @Input() userSign: UserSign;
+  @Input() user: User;
   @Input() type: String;
   auth: any;
   firebaseConfig;

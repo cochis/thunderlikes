@@ -1,7 +1,10 @@
 export interface User {
+    uid:string,
+    displayName:string,
     name: string,
     lastname: string,
     email: string,
+    password: string,
     idRole: string,
     dateBirth: string,
     description: string,
@@ -10,6 +13,7 @@ export interface User {
     getPostLikes: string
 }
 export interface UserSign {
+
     nickname: string,
     email: string,
     password: string,
@@ -24,7 +28,7 @@ export interface UserSignData {
 export interface PostToLike {
     idUser: string,
     idPlattform: string,
-    requires: string,
+    requires: [string],
     urlPostToLike: string,
     datePostEnd: string,
     dateCreatePostToLike: string,

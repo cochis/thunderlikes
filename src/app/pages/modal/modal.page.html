@@ -10,8 +10,8 @@
 
 
 
-  <form #formulario="ngForm">
- 
+  <form #formulario="ngForm" *ngIf="type == '1'">
+
     <ion-item>
       <ion-label>Email:</ion-label>
       <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="userSign.email"
@@ -30,24 +30,65 @@
 
 
   </form>
+  <form #formulario="ngForm" *ngIf="type == '2'">
 
- 
-    
-    <ion-button color="primary"  *ngIf="type == '1'" shape="round" (click)="login()" expand="full" class="ion-margin-top" >login</ion-button>
+    <ion-item>
+      <ion-label>Nombre:</ion-label>
+      <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="userSign.email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Apeidos:</ion-label>
+      <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="userSign.email"  required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Email:</ion-label>
+      <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="userSign.email"
+        pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Password:</ion-label>
+      <ion-input type="password" name="password" [(ngModel)]="userSign.password" required placeholder="Contraseña">
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Fecha de nacimiento:</ion-label>
+      <ion-input type="date" placeholder="Email" name="email" [(ngModel)]="userSign.email"
+      required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Describete</ion-label>
+      <ion-textarea clearOnEdit="true"></ion-textarea>
+    </ion-item>
+   
 
-    <ion-item-divider color="tertiary" class="ion-margin ion-justify-content-center" style="margin: auto;
+
+
+
+
+
+  </form>
+
+
+
+  <ion-button color="primary" *ngIf="type == '1'" shape="round" (click)="login()" expand="full" class="ion-margin-top">
+    login</ion-button>
+
+  <ion-item-divider color="tertiary" class="ion-margin ion-justify-content-center" style="margin: auto;
 margin-top: 30px;
 margin-bottom: 30px;text-align:center;">
-  <ion-label style="margin-left: auto; margin-right: auto;">
-    -- o --
-  </ion-label>
-</ion-item-divider>
+    <ion-label style="margin-left: auto; margin-right: auto;">
+      -- o --
+    </ion-label>
+  </ion-item-divider>
 
-    <ion-button color="primary"  *ngIf="type == '2'"[disabled]="formulario.invalid" shape="round" (click)="enviar()" expand="full" class="ion-margin-top">Enviar</ion-button>
-    <ion-button color="google"   shape="round" (click)="loginGoogle()" expand="full"class="ion-margin-top">login with Google</ion-button>
-    <ion-button color="facebook"   shape="round" (click)="loginFacebook()" expand="full"  >login with facebook</ion-button>
+  <ion-button color="primary" *ngIf="type == '2'" [disabled]="formulario.invalid" shape="round" (click)="enviar()"
+    expand="full" class="ion-margin-top">Enviar</ion-button>
+  <ion-button color="google" shape="round" (click)="loginGoogle()" expand="full" class="ion-margin-top">login with
+    Google</ion-button>
+  <ion-button color="facebook" shape="round" (click)="loginFacebook()" expand="full">login with facebook</ion-button>
 
-    <ion-button color="danger" (click)="cancelar()" shape="round" expand="full" class="ion-margin-top">Cancelar</ion-button>
-  
+  <ion-button color="danger" (click)="cancelar()" shape="round" expand="full" class="ion-margin-top">Cancelar
+  </ion-button>
+
 
 </ion-content>
