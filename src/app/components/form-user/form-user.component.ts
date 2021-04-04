@@ -6,8 +6,10 @@ import { environment } from 'src/environments/environment';
 import { FunctionService } from '../../services/functions';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserLocalStorageInterface } from 'src/app/interfaces/useLocalStorage.interface';
+import * as SecureLS from 'secure-ls';
 
- 
 @Component({
   selector: 'app-form-user',
   templateUrl: './form-user.component.html',
@@ -17,6 +19,7 @@ import { FirebaseService } from '../../services/firebase.service';
 
 
 export class FormUserComponent implements OnInit {
+  ls = new SecureLS({encodingType: 'aes'});
   public user: User = {
     uid: "",
     displayName: "",
@@ -32,7 +35,11 @@ export class FormUserComponent implements OnInit {
     getPostLikes: ""
   }
   userCredential: any;
-  constructor(private functionService: FunctionService, private router: Router, private serviceFB: FirebaseService) { }
+  constructor(
+    private functionService: FunctionService,
+    private router: Router, private serviceFB: FirebaseService,
+    private _auth: AuthService
+    ) { }
 
   ngOnInit() { }
 
@@ -45,8 +52,21 @@ export class FormUserComponent implements OnInit {
     this.user.dateBirth = this.functionService.convertBeautifulDate(this.user.dateBirth);
     this.user.displayName = this.user.name + " " + this.user.lastname;
     console.log(this.user);
-    this.serviceFB.createUser(this.user);
-        
+    //this.serviceFB.createUser(this.user);
+    this._auth.createUser(this.user).then(response => {
+      console.log('*_* response: ', response);
+      var userLS: UserLocalStorageInterface = {
+        email: response.user.email,
+        uid: response.user.uid,
+        displayName: (response.user.displayName==undefined||response.user.displayName==null?'':response.user.displayName),
+        photoUrl: response.user.photoURL
+      }
+      //this.ls.set('dUaStEaR', userLS);
+      localStorage.setItem('dUaStEaR', JSON.stringify(userLS));
+    }).catch(error => {
+      console.log('*_* error: ', error);
+
+    });
   }
 
   registerGoogle() {

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="tertiary">
     <ion-title *ngIf="type == '1'">Login</ion-title>
-    <ion-title *ngIf="type == '2'">Crear cuenta</ion-title>
+   
   </ion-toolbar>
 </ion-header>
 
@@ -81,8 +81,7 @@ margin-bottom: 30px;text-align:center;">
     </ion-label>
   </ion-item-divider>
 
-  <ion-button color="primary" *ngIf="type == '2'" [disabled]="formulario.invalid" shape="round" (click)="enviar()"
-    expand="full" class="ion-margin-top">Enviar</ion-button>
+   
   <ion-button color="google" shape="round" (click)="loginGoogle()" expand="full" class="ion-margin-top">login with
     Google</ion-button>
   <ion-button color="facebook" shape="round" (click)="loginFacebook()" expand="full">login with facebook</ion-button>

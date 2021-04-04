@@ -14,7 +14,7 @@ export class FirebaseService {
 
   constructor(public database: AngularFirestore) { }
 
-  createDoc(data: any, path: string, id: string) {
+  async createDoc(data: any, path: string, id: string) {
     const collection = this.database.collection(path);
     return collection.doc(id).set(data);
 
@@ -42,21 +42,6 @@ export class FirebaseService {
   getCollection(path: string) {
     const collection = this.database.collection(path);
     return collection.valueChanges();
-  }
-
-  createUser(user) {
-    console.log(user);
-    const auth = firebase.default.auth();
-    const db = firebase.default.database();
-    auth.signInWithEmailAndPassword(user.email, user.password).then(userCredential => {
-
-      console.log(userCredential);
-
-    }).catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-
-    });;
   }
 
 }

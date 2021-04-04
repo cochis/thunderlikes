@@ -4,21 +4,14 @@
 <ion-button color="primary" *ngIf="!loginCheck" (click)="mostrarModal(2)">
   <ion-icon slot="icon-only" name="person-add"></ion-icon>
 </ion-button>
+
 <ion-button color="primary" *ngIf="loginCheck" (click)="logOut()">
-  <ion-chip *ngIf="!flagPhoto">
-    <ion-avatar>
-      <!-- <img src="./assets/img/avatar.jpg"> -->
-      <img src="{{user.photoURL}}">
-    </ion-avatar>
-  </ion-chip>
-  <ion-chip *ngIf="flagPhoto">
-    <ion-avatar>
-      <!-- <img src="./assets/img/avatar.jpg"> -->
-      <img src="assets/img/bussines/user.png">
+  <ion-chip>
+    <ion-avatar >
+      <img id="avatar" src="assets/img/bussines/user.png">
     </ion-avatar>
   </ion-chip>
 </ion-button>
 <ion-button color="primary" *ngIf="loginCheck" (click)="logOut()">
   <ion-icon slot="icon-only" name="log-out"></ion-icon>
 </ion-button>
- 

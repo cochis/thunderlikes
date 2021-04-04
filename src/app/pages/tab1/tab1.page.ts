@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
-import { UserSign, UserSignData } from '../../interfaces/interfaces';
+import { UserSign, UserSignData, PostToLike } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import * as admin from "firebase-admin";
 import { environment } from '../../../environments/environment.prod';
@@ -23,9 +23,9 @@ export class Tab1Page {
   userSignData: any[] = [];
   firebaseConfig;
   loginCheck: Boolean = false;
-  postToLike: any;
-  postsToLikes: any;
-  postsToLike: any[] = [];
+  postToLike: any = [];
+  checkNoMore: boolean = false;
+  sum: number = 3;
   test = [1, 1];
   lengthPost: number = 0;
   flagPost: Boolean = false;
@@ -67,7 +67,7 @@ export class Tab1Page {
     if (!firebase.default.apps.length) {
       firebase.default.initializeApp(this.firebaseConfig);
     }
-    this.user = JSON.parse(localStorage.getItem("user"));
+    this.user = JSON.parse(localStorage.getItem("dUaStEaR"));
 
   }
 
@@ -78,57 +78,65 @@ export class Tab1Page {
     const auth = firebase.default.auth();
     const db = firebase.default.database();
     const fs = firebase.default.firestore();
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.loginCheck = true;
-        const doc = fs.collection('postToLike');
-        this.serviceFb.getCollection("/PostToLike").subscribe(res => {
+    console.log(this.user);
+    if (this.user !== null && this.user !== undefined) {
+      var range;
+      console.log("existe");
+      this.serviceFb.getCollection("/PostToLike").subscribe(res => {
+        console.log(res)
 
-          this.revome();
-          this.postToLike = res;
-          console.log(this.postToLike);
-          // this.LS.set("post", this.postToLike);
-          localStorage.setItem("pLoIsKtEtO",JSON.stringify(this.postToLike));
-          this.flagPost = true;
+        localStorage.setItem("pLoIsKtEtO", JSON.stringify(res));
+        if (!localStorage.getItem("vMeArA")) {
+          range = {
+            init: 0,
+            end: this.sum,
+            checkNoMore: true
+          }
 
-          setTimeout(() => {
-            for (let i = 0; i < this.postToLike.length; i++) {
+        } else {
+          range = JSON.parse(localStorage.getItem("vMeArA"));
+        }
+        this.checkNoMore = range.checkNoMore;
+        localStorage.setItem("vMeArA", JSON.stringify(range));
+        // this.postToLike = res;
 
-              console.log('*_* for: ', this.postToLike[i].urlPostToLike);
-              console.log(document.getElementById("algo" + i));
 
-              document.getElementById("algo" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
-              document.getElementById("algo1" + i).setAttribute("data-href", this.postToLike[i].urlPostToLike);
-            }
-            this.scriptFB();
-          }, 1000);
-        },
-          error => {
-            console.log(error);
+        this.flagPost = true
+        this.cargarPost(range);
 
-          })
-      } else {
-        this.userSignData = null;
-        this.loginCheck = false;
-        this.loadding = false;
-      }
-    });
+
+
+      })
+    } else {
+      console.log("no existe");
+    }
     this.loadding = false;
   }
   scriptFB() {
+    console.log('scripot fb');
+
     var script = document.createElement("script");
     script.src = "https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1";
     script.async = true;
     script.defer = true;
     script.id = "headFacebook";
+    script.nonce = "n4VHesYa";
+    
     document.head.appendChild(script);
   }
 
-  revome() {
+  remove() {
     const scriptList = document.querySelectorAll("script")
+    console.log('*_* scripts', scriptList);
     const convertedNodeList = Array.from(scriptList)
     const testScript = convertedNodeList.find(script => script.id === "headFacebook")
+    console.log('*_* scripts 2', testScript);
     testScript?.parentNode.removeChild(testScript)
+
+    setTimeout(() => {
+      console.log("integra scripts");
+      this.scriptFB();
+    }, 1000);
 
   }
 
@@ -151,6 +159,91 @@ export class Tab1Page {
 
   }
 
+  cargarPost(range) {
 
+    this.postToLike = [];
+    var postToLike = JSON.parse(localStorage.getItem("pLoIsKtEtO"));
+    for (let i = range.init; i < range.end; i++) {
+      this.postToLike.push(postToLike[i]);
+    }
+    console.log(this.postToLike);
+    var count = 0;
+    setTimeout(() => {
+      console.log(document.getElementById("postShow0"));
+      console.log(document.getElementById("btnShare0"));
+
+    }, 500);
+
+    setTimeout(() => {
+      for (let i = range.init; i < range.end; i++) {
+        console.log(postToLike[i]);
+        document.getElementById("postShow" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
+        document.getElementById("btnShare" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
+        ++count;
+      }
+
+      this.remove();
+
+    }, 1000);
+
+
+    // setTimeout(() => {
+    //   this.scriptFB();
+    // }, 2000);
+  }
+
+  verMas() {
+
+
+    var range = JSON.parse(localStorage.getItem("vMeArA"));
+    var post = JSON.parse(localStorage.getItem("pLoIsKtEtO"));
+
+    var checkNoMore = false;
+    console.log(range);
+    var init = range.init + this.sum;
+
+    if (range.end + this.sum > post.length) {
+      var end = post.length;
+      checkNoMore = false;
+    } else {
+      var end = range.end + this.sum;
+      checkNoMore = true;
+    }
+
+    range = {
+      init: init,
+      end: end,
+      checkNoMore
+    }
+
+    localStorage.setItem("vMeArA", JSON.stringify(range));
+    // window.location.reload();
+    this.cargarPost(range);
+  }
+  lessPage() {
+    this.postToLike = [];
+    var range = JSON.parse(localStorage.getItem("vMeArA"));
+    var post = JSON.parse(localStorage.getItem("pLoIsKtEtO"));
+
+    var checkNoMore = false;
+    console.log(range);
+    var init = range.init - this.sum;
+    var end = range.end - this.sum;
+
+
+    range = {
+      init: init,
+      end: end,
+      checkNoMore
+    }
+
+    localStorage.setItem("vMeArA", JSON.stringify(range));
+    // window.location.reload();
+    this.cargarPost(range);
+  }
+  ngOnChanges() {
+    var range = JSON.parse(localStorage.getItem("vMeArA"));
+    this.cargarPost(range);
+  }
 
 }

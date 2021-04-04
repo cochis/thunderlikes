@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import * as admin from "firebase-admin";
 import { environment } from '../../../environments/environment.prod';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 
@@ -21,11 +22,13 @@ export class LoggerComponent implements OnInit {
   userSignData: any[] = [];
   firebaseConfig;
   loginCheck: Boolean = false;
-  flagPhoto = false ;
+
   @Output() userEmit: EventEmitter<any>;
   constructor(private modalCtrl: ModalController,
     private alertCtrl: AlertController,
-    private router: Router) {
+    private router: Router,
+    private _auth: AuthService
+  ) {
     this.userEmit = new EventEmitter();
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -41,7 +44,7 @@ export class LoggerComponent implements OnInit {
   ngOnInit() {
     this.userSign = {
       nickname: "",
-      email: "ing.oarrs@gmail.com",
+      email: "prueba1@prueba1.com",
       password: "123456",
       date: new Date().toDateString()
     }
@@ -71,9 +74,7 @@ export class LoggerComponent implements OnInit {
 
       console.log(user);
 
-      if(user.photoURL == null){
-        this.flagPhoto=true;
-      }
+
       this.user = {
         uid: user.uid,
         displayName: user.displayName,
@@ -92,8 +93,8 @@ export class LoggerComponent implements OnInit {
       console.log(url);
       if (user !== null) {
         // this.user = user;
-        localStorage.setItem("user", JSON.stringify(user));
-
+        //localStorage.setItem("user", JSON.stringify(user));
+        this.router.navigate(['/']);
       } else {
         localStorage.removeItem("user");
         this.user = undefined;
@@ -107,6 +108,7 @@ export class LoggerComponent implements OnInit {
 
       if (user) {
         this.loginCheck = true;
+
         this.userSignData = [];
         fs.collection('UsersSignIn').get()
           .then((snapshot) => {
@@ -122,7 +124,18 @@ export class LoggerComponent implements OnInit {
             })
 
 
-          })
+          });
+        if (user.photoURL === null) {
+          // user.photoURL = "assets/img/bussines/user.png";
+
+        } else {
+          setTimeout(() => {
+            console.log(user.photoURL);
+            console.log(document.getElementById("avatar"));
+            document.getElementById("avatar").setAttribute("src", user.photoURL);
+          }, 1000);
+
+        }
       } else {
 
         this.userSignData = null;
@@ -165,16 +178,24 @@ export class LoggerComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.removeItem("user");
-    const auth = firebase.default.auth();
-    auth.signOut().then(() => {
-
+    this._auth.logout().then(data => {
+      localStorage.clear();
       this.emitNull();
+      this.router.navigate(['/']);
+    })
 
-      localStorage.removeItem("user");
-      this.router.navigate(['/'])
-    });
+    /**
+     const auth = firebase.default.auth();
+     auth.signOut().then(() => {
+
+       this.emitNull();
+
+       localStorage.removeItem("user");
+     });
+     *
+     */
   }
+
   async presentAlert(type, data: any) {
     if (type == "danger") {
 
@@ -187,7 +208,7 @@ export class LoggerComponent implements OnInit {
       });
       await alert.present();
     } else {
-      console.log(data.profile);
+      console.log(data);
       const alert = await this.alertCtrl.create({
         backdropDismiss: false,
         header: type,
