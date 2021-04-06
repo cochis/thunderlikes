@@ -13,7 +13,7 @@
     <ion-buttons slot="end">
       <!-- (click)="mostrarMenu()" -->
   
-      <app-logger></app-logger>
+      <app-logger (userEmit)="verUser($event)" ></app-logger>
       <ion-back-button
       defaultHref="/"
        

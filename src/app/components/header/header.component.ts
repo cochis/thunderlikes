@@ -11,4 +11,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() { }
 
+
+   verUser( $event ){
+     console.log($event);
+   }
+
 }

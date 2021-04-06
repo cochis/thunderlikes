@@ -1,39 +1,41 @@
 export interface User {
-    uid:string,
-    displayName:string,
-    name: string,
-    lastname: string,
-    email: string,
-    password: string,
-    idRole: string,
-    dateBirth: string,
-    description: string,
-    dateCreated: string,
-    dateEdit: string,
-    getPostLikes: string
+  uid: string;
+  displayName: string;
+  name: string;
+  lastname: string;
+  email: string;
+  password: string;
+  idRole: string;
+  dateBirth: string;
+  description: string;
+  dateCreated: string;
+  dateEdit: string;
+  getPostLikes: string;
 }
 export interface UserSign {
-
-    nickname: string,
-    email: string,
-    password: string,
-    date: string
+  uid: string;
+  displayname: string;
+  email: string;
+  date: string;
+  emailVerified: string;
 }
 
 export interface UserSignData {
-    dateSignIn: string,
-    dateSignOut: string,
-    emailSignIn: string
-}
+    dateSignIn: string;
+    dateSignOut: string;
+    emailSignIn: string;
+  }
 export interface PostToLike {
-    idUser: string,
-    idPlattform: string,
-    requires: [string],
-    urlPostToLike: string,
-    datePostEnd: string,
-    dateCreatePostToLike: string,
-    dateEditPostToLike: string 
+  idUser: string;
+  idPlattform: string;
+  requires: [string];
+  urlPostToLike: string;
+  datePostEnd: string;
+  dateCreatePostToLike: string;
+  dateEditPostToLike: string;
 }
 
-
- 
+export interface UserLogin {
+    email: string;
+    password: string;
+  }
