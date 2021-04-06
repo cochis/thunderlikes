@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { User } from '../../interfaces/interfaces';
+import { User, UserSign } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import { environment } from 'src/environments/environment';
 import { FunctionService } from '../../services/functions';
@@ -15,109 +15,116 @@ import * as SecureLS from 'secure-ls';
   templateUrl: './form-user.component.html',
   styleUrls: ['./form-user.component.scss'],
 })
-
-
-
 export class FormUserComponent implements OnInit {
-  ls = new SecureLS({encodingType: 'aes'});
+  ls = new SecureLS({ encodingType: 'aes' });
+  public userSign: UserSign;
   public user: User = {
-    uid: "",
-    displayName: "",
-    name: "",
-    lastname: "",
-    email: "",
-    password: "",
-    idRole: "",
-    dateBirth: "",
-    description: "",
-    dateCreated: "",
-    dateEdit: "",
-    getPostLikes: ""
-  }
+    uid: '',
+    displayName: '',
+    name: '',
+    lastname: '',
+    email: '',
+    password: '',
+    idRole: '',
+    dateBirth: '',
+    description: '',
+    dateCreated: '',
+    dateEdit: '',
+    getPostLikes: '',
+  };
   userCredential: any;
   constructor(
     private functionService: FunctionService,
-    private router: Router, private serviceFB: FirebaseService,
-    private _auth: AuthService
-    ) { }
+    private router: Router,
+    private serviceFB: FirebaseService,
+    private _auth: AuthService,
+    private _firebaseService: FirebaseService
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   onSubmit(formulario: NgForm) {
     console.log('submit');
-    let dateCreated = this.functionService.convertBeautifulDate(new Date);
-    let dateEdit = this.functionService.convertBeautifulDate(new Date);
+    var date = new Date();
+    let dateCreated = date.getTime().toString();
+    let dateEdit = date.getTime().toString();
+    let id = this._firebaseService.getId();
     this.user.dateCreated = dateCreated;
     this.user.dateEdit = dateEdit;
-    this.user.dateBirth = this.functionService.convertBeautifulDate(this.user.dateBirth);
-    this.user.displayName = this.user.name + " " + this.user.lastname;
+    this.user.dateBirth = this.user.dateBirth;
+    this.user.displayName = this.user.name + ' ' + this.user.lastname;
+    this.user.idRole = 'UserCreate';
+    this.user.uid = id;
     console.log(this.user);
-    //this.serviceFB.createUser(this.user);
-    this._auth.createUser(this.user).then(response => {
-      console.log('*_* response: ', response);
-      var userLS: UserLocalStorageInterface = {
-        email: response.user.email,
-        uid: response.user.uid,
-        displayName: (response.user.displayName==undefined||response.user.displayName==null?'':response.user.displayName),
-        photoUrl: response.user.photoURL
-      }
-      //this.ls.set('dUaStEaR', userLS);
-      localStorage.setItem('dUaStEaR', JSON.stringify(userLS));
-    }).catch(error => {
-      console.log('*_* error: ', error);
+    this._auth.createUser(this.user).then(
+      (user) => {
+        console.log('User', user);
+        localStorage.setItem('dUaStEaR', JSON.stringify(user));
+        id = this._firebaseService.getId();
+        this._firebaseService.createDoc(this.user, '/Users', id);
 
-    });
+        this.userSign = {
+          uid: user.user.uid,
+          displayname: user.user.displayName,
+          email: user.user.email,
+          date: new Date().toDateString(),
+          emailVerified: user.user.emailVerified,
+        };
+
+        id = this._firebaseService.getId();
+        this._firebaseService.createDoc(this.userSign, '/UserSign', id);
+        this.router.navigate(['/tabs/tab2']);
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
   }
 
   registerGoogle() {
-    const auth = firebase.default.auth();
     const provider = new firebase.default.auth.GoogleAuthProvider();
-    const db = firebase.default.database();
-    auth.signInWithPopup(provider).then(result => {
-      console.log(result.additionalUserInfo.profile);
-      var profile = result.additionalUserInfo.profile;
+    this._auth.loginGoogle(provider).then(
+      (user) => {
+        localStorage.setItem('dUaStEaR', JSON.stringify(user));
 
+        this.userSign = {
+          uid: user.user.uid,
+          displayname: user.user.displayName,
+          email: user.user.email,
+          date: new Date().toDateString(),
+          emailVerified: user.user.emailVerified,
+        };
 
-      let user = result.user;
-      let date = new Date().toString();
-      const newSign = {
-        emailSignIn: user.email,
-        dateSingIn: date,
-        dateSingOut: ""
-      }
-
-      db.ref('UsersSignIn').push(newSign).then(newUser => {
-
-      }).catch(err => {
+        let id = this._firebaseService.getId();
+        this._firebaseService.createDoc(this.userSign, '/UserSign', id);
+        this.router.navigate(['/tabs/tab2']);
+      },
+      (err) => {
         console.log(err);
-      });
-    }).catch(err => {
-      console.log(err);
-    });
+      }
+    );
   }
   registerFacebook() {
-    const auth = firebase.default.auth();
     const provider = new firebase.default.auth.FacebookAuthProvider();
-    const db = firebase.default.database();
-    auth.signInWithPopup(provider).then(result => {
+    this._auth.loginFacebook(provider).then(
+      (user) => {
+        localStorage.setItem('dUaStEaR', JSON.stringify(user));
+        this.userSign = {
+          uid: user.user.uid,
+          displayname: user.user.displayName,
+          email: user.user.email,
+          date: new Date().toDateString(),
+          emailVerified: user.user.emailVerified,
+        };
 
-      console.log(result);
-      let user = result.user;
-      let date = new Date().toString();
-      const newSign = {
-        emailSignIn: user.email,
-        dateSingIn: date,
-        dateSingOut: ""
-      }
-
-      db.ref('UsersSignIn').push(newSign).then(newUser => {
-
-      }).catch(err => {
+        let id = this._firebaseService.getId();
+        this._firebaseService.createDoc(this.userSign, '/UserSign', id);
+        this.router.navigate(['/tabs/tab2']);
+      },
+      (err) => {
         console.log(err);
-      });
-    }).catch(err => {
-      console.log(err);
-    });
+      }
+    );
   }
 
   cancelar() {

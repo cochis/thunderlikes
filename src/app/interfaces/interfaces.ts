@@ -17,7 +17,7 @@ export interface UserSign {
   displayname: string;
   email: string;
   date: string;
-  emailVerified: string;
+  emailVerified: boolean;
 }
 
 export interface UserSignData {
