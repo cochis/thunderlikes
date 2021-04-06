@@ -147,6 +147,9 @@ export class LoggerComponent implements OnInit {
   }
 
   insertPhoto(user) {
+    console.log(user);
+    console.log(user.user);
+    console.log(user.user.photoURL);
     if (user.user.photoURL !== null) {
       setTimeout(() => {
         document

@@ -20,7 +20,7 @@
       </ion-avatar>
     </ion-chip>
     <ion-buttons slot="end">
-      <app-logger ></app-logger>
+      <app-logger (userEmit)="verUser($event)" ></app-logger>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -62,45 +62,13 @@
           </ion-slide>
         </ion-slides>
 
-        <!-- <ion-list *ngIf="user">
-
-          <ion-item-sliding *ngFor="let dataUser of userSignData  ">
-
-            <ion-item-options side="start">
-              <ion-item-option>
-                <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
-              </ion-item-option>
-              <ion-item-option color="danger">
-                <ion-icon slot="icon-only" name="share-outline"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-
-            <ion-item>
-              <ion-label>
-                <h3>{{ dataUser.emailSignIn }}</h3>
-
-              </ion-label>
-              {{ dataUser.dateSignIn }}
-              <ion-label slot="end" class="ion-text-end text-small"> {{ dataUser.dateSignOut}} </ion-label>
-
-            </ion-item>
-
-            <ion-item-options side="end">
-              <ion-item-option color="danger">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-
-          </ion-item-sliding>
-
-
-        </ion-list> -->
+      
       </ion-col>
     </ion-row>
   </ion-grid>
   <div id="scriptFB"></div>
   <div id="post"></div>
-  <ion-grid fixed *ngIf="flagPost">
+  <ion-grid fixed *ngIf="user">
     <ion-row>
       <ion-col
         size="12"
@@ -134,32 +102,33 @@
         </ion-card-content>
       </ion-col>
     </ion-row>
+    <div style="width: 80%; text-align: center !important; margin: auto">
+      <div
+        style="
+          width: 50%;
+          padding: 50px;
+          margin: auto;
+          text-align: center;
+          float: left;
+        "
+      >
+        <ion-button expand="block" (click)="lessPage()">Anterior</ion-button>
+      </div>
+      <div
+        style="
+          width: 50%;
+          padding: 50px;
+          margin: auto;
+          text-align: center;
+          float: left;
+        "
+      >
+        <ion-button expand="block" (click)="verMas()"> Siguiente</ion-button>
+      </div>
+    </div>
   </ion-grid>
 
-  <div style="width: 80%; text-align: center !important; margin: auto">
-    <div
-      style="
-        width: 50%;
-        padding: 50px;
-        margin: auto;
-        text-align: center;
-        float: left;
-      "
-    >
-      <ion-button expand="block" (click)="lessPage()">Anterior</ion-button>
-    </div>
-    <div
-      style="
-        width: 50%;
-        padding: 50px;
-        margin: auto;
-        text-align: center;
-        float: left;
-      "
-    >
-      <ion-button expand="block" (click)="verMas()"> Siguiente</ion-button>
-    </div>
-  </div>
+  
 
   <!--
   <div id="postFB" *ngFor="let post of postToLike">

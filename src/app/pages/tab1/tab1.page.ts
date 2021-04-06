@@ -151,8 +151,9 @@ export class Tab1Page {
     }
   }
   verUser(event) {
+    console.log(event);
     this.user = event.user;
-    this.loadding = event.loadding;
+    this.loadding = false;
     this.userSignData = event.userSignData;
     // this.router.navigate(['/add-publications']);
     // console.log(this.user, this.userSignData, this.loadding);
