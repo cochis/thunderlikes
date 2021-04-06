@@ -25,7 +25,7 @@ export class Tab1Page {
   loginCheck: Boolean = false;
   postToLike: any = [];
   checkNoMore: boolean = false;
-  sum: number = 3;
+  sum: number = 6;
   test = [1, 1];
   lengthPost: number = 0;
   flagPost: Boolean = false;
@@ -177,8 +177,9 @@ export class Tab1Page {
     setTimeout(() => {
       for (let i = range.init; i < range.end; i++) {
         console.log(postToLike[i]);
-        document.getElementById("postShow" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
+        // document.getElementById("postShow" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
         document.getElementById("btnShare" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
+        document.getElementById("post" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
         ++count;
       }
 
