@@ -27,6 +27,7 @@ export interface UserSignData {
   }
 export interface PostToLike {
   idUser: string;
+  nameUser: string;
   idPlattform: string;
   requires: [string];
   urlPostToLike: string;

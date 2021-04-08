@@ -6,7 +6,7 @@
   src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1"
   nonce="Rz2JwBgx"
 ></script>
-<ion-header class="ion-no-border">
+<!-- <ion-header class="ion-no-border">
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-button color="primary">
@@ -20,11 +20,11 @@
       </ion-avatar>
     </ion-chip>
     <ion-buttons slot="end">
-      <app-logger (userEmit)="verUser($event)" ></app-logger>
+      <app-logger (userEmit)="verUser($event)"></app-logger>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
+</ion-header> -->
+<app-header titulo="Bienvenido"  (userEmit)="getUser($event)"></app-header>
 <ion-content class="ion-padding-top">
   <app-loading *ngIf="loadding"></app-loading>
   <ion-grid fixed>
@@ -61,8 +61,6 @@
             </ion-card>
           </ion-slide>
         </ion-slides>
-
-      
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -77,20 +75,58 @@
         size-sm="6"
         *ngFor="let item of postToLike; index as i"
         id="posts"
+        class="ion-align-self-center"
+        style="max-height: 550px !important; overflow: hidden; margin-top: 50px"
       >
-        <ion-card-header>
-          <div
-            class="fb-share-button"
-            [id]="'btnShare'+ i"
-            data-layout="button_count"
-            data-size="large"
-          >
-            <a target="_blank" href="" class="fb-xfbml-parse-ignore"
-              >Compartir</a
-            >
-          </div>
+        <ion-card-header
+          style="margin: auto; margin-top: 25px; margin-bottom: 25px"
+        >
+          <ion-row>
+            <ion-col *ngIf="item.requires.includes( 'lk' )">
+              <div
+                class="fb-like"
+                data-href="https://www.facebook.com/photo?fbid=3149240351970245"
+                data-width="100%"
+                data-layout="standard"
+                data-action="like"
+                data-size="small"
+                data-share="true"
+              ></div
+            ></ion-col>
+            <ion-col *ngIf="item.requires.includes( 'cm' )">
+              <div
+                [id]="'comment'+ i"
+                class="fb-comments"
+                data-href="https://www.facebook.com/100053721791797/posts/259376982529693/?app=fbl"
+                data-width="100%"
+                data-numposts="1"
+              ></div>
+            </ion-col>
+            <ion-col *ngIf="item.requires.includes( 'sh' )">
+              <div
+                class="fb-share-button"
+                [id]="'btnShare'+ i"
+                data-layout="button_count"
+                data-size="large"
+                *ngIf="item.requires.includes( 'sh' )"
+              >
+                <a target="_blank" href="" class="fb-xfbml-parse-ignore"
+                  >Compartir</a
+                >
+              </div>
+            </ion-col>
+          </ion-row>
         </ion-card-header>
-        <ion-card-content style="overflow: hidden !important" height="250px">
+        <ion-card-content
+          style="overflow: hidden !important"
+          style="
+            max-height: 400px !important;
+            margin: auto;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            float: left;
+          "
+        >
           <div
             class="fb-post"
             height="250px"
@@ -98,6 +134,7 @@
             data-href="https://www.facebook.com/20531316728/posts/10154009990506729/"
             data-width="350"
             data-show-text="false"
+            style="margin: auto"
           ></div>
         </ion-card-content>
       </ion-col>
@@ -127,8 +164,6 @@
       </div>
     </div>
   </ion-grid>
-
-  
 
   <!--
   <div id="postFB" *ngFor="let post of postToLike">

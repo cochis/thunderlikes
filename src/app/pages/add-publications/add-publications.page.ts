@@ -10,45 +10,41 @@ import { FunctionService } from '../../services/functions';
   styleUrls: ['./add-publications.page.scss'],
 })
 export class AddPublicationsPage implements OnInit {
-  user: any = JSON.parse(localStorage.getItem("user"));
-
+  user: any;
   postToLike: PostToLike = {
     idUser: '',
+    nameUser: '',
     idPlattform: '',
     requires: [null],
     dateCreatePostToLike: '',
     dateEditPostToLike: '',
     datePostEnd: '',
-    urlPostToLike: ''
+    urlPostToLike: '',
   };
 
-
-
-  constructor(private funtionSv: FunctionService, private serviceFb: FirebaseService) {
-
-  }
+  constructor(
+    private funtionSv: FunctionService,
+    private serviceFb: FirebaseService
+  ) {}
 
   ngOnInit() {
-    
+    this.user = JSON.parse(localStorage.getItem('dUaStEaR'));
     console.log(this.user);
-    
+    this.postToLike.idUser = this.user.displayName;
+    console.log(this.postToLike.idUser);
     
   }
   onSubmit(formulario: NgForm) {
-    var date = new Date;
+    var date = new Date();
     this.postToLike.dateCreatePostToLike = date.getTime().toString();
     this.postToLike.dateEditPostToLike = date.getTime().toString();
-    this.postToLike.datePostEnd =  date.getTime().toString();
-    let id  = this.serviceFb.getId();
- 
-    
-    this.serviceFb.createDoc(this.postToLike, "/PostToLike", id);
+    this.postToLike.datePostEnd = date.getTime().toString();
+    let id = this.serviceFb.getId();
 
-    this.serviceFb.getCollection("/PostToLike").subscribe(res => {
+    this.serviceFb.createDoc(this.postToLike, '/PostToLike', id);
+
+    this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
       console.log(res);
-
     });
-
   }
-
 }

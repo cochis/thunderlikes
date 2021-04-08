@@ -88,22 +88,13 @@ export class LoggerComponent implements OnInit {
           date: new Date().toDateString(),
           emailVerified: result.user.emailVerified,
         };
-
+        let emit = {
+          user: result,
+          loadding: true,
+        };
+        this.userEmit.emit(emit);
         let id = this._firebaseService.getId();
-        this._firebaseService.createDoc(this.userSign, '/UserSign', id).then(
-          (result) => {
-            this.presentAlert('success', 'Entro');
-            let emit = {
-              user: result,
-              loadding: true,
-            };
-            this.userEmit.emit(emit);
-          },
-          (err) => {
-            console.log(err);
-            this.presentAlert('danger', 'Hubo un error ');
-          }
-        );
+        this._firebaseService.createDoc(this.userSign, '/UserSign', id);
       }
     }
   }
