@@ -74,7 +74,7 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-    // console.log('*_* init', this.user);
+    console.log('*_* init', this.user);
     this.loadding = true;
     const auth = firebase.default.auth();
     const db = firebase.default.database();
@@ -164,6 +164,8 @@ export class Tab1Page {
     this.postToLike = undefined;
     this.postToLike = [];
     var postToLike = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
+
+    console.log(postToLike);
     for (let i = range.init; i < range.end; i++) {
       this.postToLike.push(postToLike[i]);
     }
@@ -174,13 +176,13 @@ export class Tab1Page {
       for (let i = 0; i < range.end; i++) {
         // console.log(postToLike[i]);
         // document.getElementById("postShow" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
-        console.log(postToLike[i].requires);
+        // console.log(postToLike[i].requires);
 
         if (
           postToLike[i].requires.includes('sh') &&
           document.getElementById('btnShare' + count)
         ) {
-          console.log('share' + count, postToLike[i].requires.includes('sh'));
+          // console.log('share' + count, postToLike[i].requires.includes('sh'));
           document
             .getElementById('btnShare' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -189,7 +191,7 @@ export class Tab1Page {
           postToLike[i].requires.includes('lk') &&
           document.getElementById('post' + count)
         ) {
-          console.log('like' + count, postToLike[i].requires.includes('lk'));
+          // console.log('like' + count, postToLike[i].requires.includes('lk'));
           document
             .getElementById('post' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -198,7 +200,7 @@ export class Tab1Page {
           postToLike[i].requires.includes('cm') &&
           document.getElementById('comment' + count)
         ) {
-          console.log('coment' + count, postToLike[i].requires.includes('cm'));
+          // console.log('coment' + count, postToLike[i].requires.includes('cm'));
           document
             .getElementById('comment' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -274,8 +276,21 @@ export class Tab1Page {
 
     if (localStorage.getItem('dUaStEaR')) {
       this.user = JSON.parse(localStorage.getItem('dUaStEaR'));
+      var range = {
+        init: 0,
+        end: this.sum,
+        checkNoMore: true,
+      };
+      localStorage.setItem('vMeArA', JSON.stringify(range));
+      this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
+        res = this.sort(res);
+        localStorage.setItem('pLoIsKtEtO', JSON.stringify(res));
+        setTimeout(() => {
+          this.cargarPost(range);
+        }, 500);
+      });
     } else {
-      this.user = user;
+      this.user = user.user;
     }
   }
   eliminarHeadFacebook() {
@@ -287,6 +302,21 @@ export class Tab1Page {
   }
 
   doRefresh(event) {
+    var dUaStEaR;
+    var pLoIsKtEtO;
+    if (localStorage.getItem('dUaStEaR')) {
+      dUaStEaR = JSON.parse(localStorage.getItem('dUaStEaR'));
+    }
+    if (localStorage.getItem('dUaStEaR')) {
+      pLoIsKtEtO = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
+    }
+    localStorage.clear();
+    if (pLoIsKtEtO !== null) {
+      localStorage.setItem('pLoIsKtEtO', JSON.stringify(pLoIsKtEtO));
+    }
+    if (dUaStEaR !== null) {
+      localStorage.setItem('dUaStEaR', JSON.stringify(dUaStEaR));
+    }
     if (localStorage.getItem('vMeArA')) {
       localStorage.removeItem('vMeArA');
     }
@@ -296,9 +326,17 @@ export class Tab1Page {
       checkNoMore: true,
     };
     localStorage.setItem('vMeArA', JSON.stringify(range));
-    this.cargarPost(range);
+
+    this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
+      res = this.sort(res);
+      localStorage.setItem('pLoIsKtEtO', JSON.stringify(res));
+      setTimeout(() => {
+        this.cargarPost(range);
+      }, 500);
+    });
+
     setTimeout(() => {
-     event.target.complete();
+      event.target.complete();
     }, 2000);
   }
 }
