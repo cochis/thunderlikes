@@ -34,6 +34,7 @@ export class Tab2Page {
   ) {}
 
   ngOnInit() {
+
     this.serviceFb.getCollection('/PtAhRnAdMeEsTlEiRkSe').subscribe((res) => {
       this.PeAtReAsM = res;
       for (let elemento of this.PeAtReAsM) {
@@ -52,6 +53,7 @@ export class Tab2Page {
     this.postToLike.dateCreatePostToLike = date.getTime().toString();
     this.postToLike.dateEditPostToLike = date.getTime().toString();
     this.postToLike.datePostEnd = date.getTime().toString();
+    this.postToLike.idUser = this.user.user.uid;
     let id = this.serviceFb.getId();
 
     this.serviceFb.createDoc(this.postToLike, '/PostToLike', id);
