@@ -26,6 +26,9 @@
 </ion-header> -->
 <app-header titulo="Bienvenido" (userEmit)="getUser($event)"></app-header>
 <ion-content class="ion-padding-top">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <app-loading *ngIf="loadding"></app-loading>
   <ion-grid fixed>
     <ion-row>
@@ -81,6 +84,7 @@
         <ion-card-header
           style="margin: auto; margin-top: 25px; margin-bottom: 25px"
         >
+        <h1>{{item.idUser}} - {{item.nameUser}}</h1>
           <ion-row>
             <ion-col size="12"  size-sm="12"  *ngIf="item.requires.includes( 'lk' )" style="text-align: center;margin: auto;">
               <div
@@ -143,7 +147,7 @@
           float: left;
         "
       >
-        <ion-button expand="block" (click)="lessPage()">Anterior</ion-button>
+        <ion-button expand="block" (click)="lessPage()" style="    font-size: 30px;"><ion-label><ion-icon name="arrow-undo-circle-sharp"></ion-icon></ion-label></ion-button>
       </div>
       <div
         style="
@@ -154,7 +158,7 @@
           float: left;
         "
       >
-        <ion-button expand="block" (click)="verMas()"> Siguiente</ion-button>
+        <ion-button expand="block" (click)="verMas()" style="    font-size: 30px;"><ion-label><ion-icon name="arrow-redo-circle-sharp"></ion-icon></ion-label> </ion-button>
       </div>
     </div>
   </ion-grid>

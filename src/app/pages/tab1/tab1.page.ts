@@ -134,8 +134,10 @@ export class Tab1Page {
 
     setTimeout(() => {
       // console.log("integra scripts");
-      this.scriptFB();
-    }, 1000);
+      if (!document.getElementById('headFacebook')) {
+        this.scriptFB();
+      }
+    }, 2000);
   }
 
   onClick() {
@@ -158,37 +160,45 @@ export class Tab1Page {
   }
 
   cargarPost(range) {
+    console.log(range);
+    this.postToLike = undefined;
     this.postToLike = [];
     var postToLike = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
     for (let i = range.init; i < range.end; i++) {
       this.postToLike.push(postToLike[i]);
     }
-    // console.log(this.postToLike);
+    console.log(this.postToLike);
     var count = 0;
-    setTimeout(() => {
-      // console.log(document.getElementById("postShow0"));
-      // console.log(document.getElementById("btnShare0"));
-    }, 500);
-
+    console.log(range);
     setTimeout(() => {
       for (let i = 0; i < range.end; i++) {
         // console.log(postToLike[i]);
         // document.getElementById("postShow" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
         console.log(postToLike[i].requires);
-        console.log('like' + count, postToLike[i].requires.includes('lk'));
-        console.log('share' + count, postToLike[i].requires.includes('sh'));
-        console.log('coment' + count, postToLike[i].requires.includes('cm'));
-        if (postToLike[i].requires.includes('sh')) {
+
+        if (
+          postToLike[i].requires.includes('sh') &&
+          document.getElementById('btnShare' + count)
+        ) {
+          console.log('share' + count, postToLike[i].requires.includes('sh'));
           document
             .getElementById('btnShare' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
         }
-        if (postToLike[i].requires.includes('lk')) {
+        if (
+          postToLike[i].requires.includes('lk') &&
+          document.getElementById('post' + count)
+        ) {
+          console.log('like' + count, postToLike[i].requires.includes('lk'));
           document
             .getElementById('post' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
         }
-        if (postToLike[i].requires.includes('cm')) {
+        if (
+          postToLike[i].requires.includes('cm') &&
+          document.getElementById('comment' + count)
+        ) {
+          console.log('coment' + count, postToLike[i].requires.includes('cm'));
           document
             .getElementById('comment' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -197,12 +207,9 @@ export class Tab1Page {
         ++count;
       }
 
+      this.eliminarHeadFacebook();
       this.remove();
     }, 1000);
-
-    // setTimeout(() => {
-    //   this.scriptFB();
-    // }, 2000);
   }
 
   verMas() {
@@ -247,8 +254,6 @@ export class Tab1Page {
       checkNoMore,
     };
 
-    localStorage.setItem('vMeArA', JSON.stringify(range));
-    // window.location.reload();
     this.cargarPost(range);
   }
   ngOnChanges() {
@@ -265,13 +270,35 @@ export class Tab1Page {
   }
 
   getUser(user) {
-
     console.log(user);
-    
+
     if (localStorage.getItem('dUaStEaR')) {
       this.user = JSON.parse(localStorage.getItem('dUaStEaR'));
     } else {
       this.user = user;
     }
+  }
+  eliminarHeadFacebook() {
+    var imagen = document.getElementById('headFacebook');
+    if (imagen) {
+      var padre = imagen.parentNode;
+      padre.removeChild(imagen);
+    }
+  }
+
+  doRefresh(event) {
+    if (localStorage.getItem('vMeArA')) {
+      localStorage.removeItem('vMeArA');
+    }
+    var range = {
+      init: 0,
+      end: this.sum,
+      checkNoMore: true,
+    };
+    localStorage.setItem('vMeArA', JSON.stringify(range));
+    this.cargarPost(range);
+    setTimeout(() => {
+     event.target.complete();
+    }, 2000);
   }
 }
