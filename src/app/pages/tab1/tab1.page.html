@@ -24,7 +24,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header> -->
-<app-header titulo="Bienvenido"  (userEmit)="getUser($event)"></app-header>
+<app-header titulo="Bienvenido" (userEmit)="getUser($event)"></app-header>
 <ion-content class="ion-padding-top">
   <app-loading *ngIf="loadding"></app-loading>
   <ion-grid fixed>
@@ -76,33 +76,36 @@
         *ngFor="let item of postToLike; index as i"
         id="posts"
         class="ion-align-self-center"
-        style="max-height: 550px !important; overflow: hidden; margin-top: 50px"
+        style="max-height: 750px !important; overflow: hidden; margin-top: 50px"
       >
         <ion-card-header
           style="margin: auto; margin-top: 25px; margin-bottom: 25px"
         >
           <ion-row>
-            <ion-col *ngIf="item.requires.includes( 'lk' )">
+            <ion-col size="12"  size-sm="12"  *ngIf="item.requires.includes( 'lk' )" style="text-align: center;margin: auto;">
               <div
-                class="fb-like"
-                data-href="https://www.facebook.com/photo?fbid=3149240351970245"
-                data-width="100%"
-                data-layout="standard"
-                data-action="like"
-                data-size="small"
-                data-share="true"
-              ></div
-            ></ion-col>
-            <ion-col *ngIf="item.requires.includes( 'cm' )">
+                class="fb-post"
+                height="350px"
+                [id]="'post'+ i"
+                data-href="https://www.facebook.com/20531316728/posts/10154009990506729/"
+                data-width="350"
+                data-show-text="false"
+                style="margin: auto"
+              ></div>
+            </ion-col>
+            <ion-col  size="12"   size-sm="12"  *ngIf="item.requires.includes( 'cm' )">
               <div
                 [id]="'comment'+ i"
                 class="fb-comments"
                 data-href="https://www.facebook.com/100053721791797/posts/259376982529693/?app=fbl"
                 data-width="100%"
                 data-numposts="1"
+                data-lazy="true"
+                data-mobile="true"
+                data-colorscheme="light"
               ></div>
             </ion-col>
-            <ion-col *ngIf="item.requires.includes( 'sh' )">
+            <ion-col  size="12" size-sm="12"  *ngIf="item.requires.includes( 'sh' )">
               <div
                 class="fb-share-button"
                 [id]="'btnShare'+ i"
@@ -127,15 +130,6 @@
             float: left;
           "
         >
-          <div
-            class="fb-post"
-            height="250px"
-            [id]="'post'+ i"
-            data-href="https://www.facebook.com/20531316728/posts/10154009990506729/"
-            data-width="350"
-            data-show-text="false"
-            style="margin: auto"
-          ></div>
         </ion-card-content>
       </ion-col>
     </ion-row>
@@ -164,12 +158,4 @@
       </div>
     </div>
   </ion-grid>
-
-  <!--
-  <div id="postFB" *ngFor="let post of postToLike">
-    {{post.urlPostToLike}}
-    <div class="fb-post" data-href="'post.urlPostToLike'" data-width="100%" data-show-text="true"></div>
-  </div> -->
-
-  <!-- <app-segments></app-segments> -->
 </ion-content>
