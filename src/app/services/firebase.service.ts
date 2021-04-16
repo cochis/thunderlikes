@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PostToLike } from '../interfaces/interfaces';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { retornaDocumentos } from '../helpers/mostrar-documentos';
 
 
 // const db = firebase.default.database();
@@ -41,7 +42,25 @@ export class FirebaseService {
   }
   getCollection(path: string) {
     const collection = this.database.collection(path);
-    return collection.valueChanges();
+     collection.ref.orderBy("dateCreatePostToLike", 'asc');
+     return collection.valueChanges();
   }
+  
+  getCollectionPagination(path: string, lastDocument: number) {
+    const collection = this.database.collection(path);
+    const query = collection.ref
+      .orderBy('dateCreatePostToLike', 'desc')
+      .startAfter(lastDocument);
+    query
+      .limit(20)
+      .get()
+      .then((snap) => {
+        retornaDocumentos(snap);
+      });
 
+    // const collection = this.database.collection(path);
+    //  collection.valueChanges();
+  }
 }
+
+

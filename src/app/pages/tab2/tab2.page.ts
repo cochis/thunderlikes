@@ -4,6 +4,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { PostToLike } from '../../interfaces/interfaces';
 import { FunctionService } from '../../services/functions';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { PrevisualizacionPostModalComponent } from '../../components/previsualizacion-post-modal/previsualizacion-post-modal.component';
 
 @Component({
   selector: 'app-tab2',
@@ -18,23 +20,23 @@ export class Tab2Page {
   postToLike: PostToLike = {
     idUser: '',
     nameUser: '',
-    idPlattform: '',
-    requires: [null],
+    idPlattform: 'fb',
+    requires: ['lk'],
     dateCreatePostToLike: '',
     dateEditPostToLike: '',
     datePostEnd: '',
-    urlPostToLike: '',
+    urlPostToLike: 'https://www.facebook.com/UberForBusiness/posts/794626994467971',
   };
 
   constructor(
     private funtionSv: FunctionService,
     private serviceFb: FirebaseService,
     private router: Router,
-    private _functionsService: FunctionService
+    private _functionsService: FunctionService,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
-
     this.serviceFb.getCollection('/PtAhRnAdMeEsTlEiRkSe').subscribe((res) => {
       this.PeAtReAsM = res;
       for (let elemento of this.PeAtReAsM) {
@@ -47,6 +49,7 @@ export class Tab2Page {
       }
     });
     this.postToLike.idUser = this.user.user.displayName;
+    this.postToLike.nameUser = this.user.user.displayName;
   }
   onSubmit(formulario: NgForm) {
     var date = new Date();
@@ -59,8 +62,29 @@ export class Tab2Page {
     this.serviceFb.createDoc(this.postToLike, '/PostToLike', id);
     this.router.navigate(['/']);
     this._functionsService.remove();
-    this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
-      console.log(res);
+    setTimeout(() => {
+      this._functionsService.addFacebook
+    }, 2000);
+    // this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
+    //   console.log(res);
+    // });
+  }
+
+  async mostrarModal() {
+    var date = new Date();
+    this.postToLike.dateCreatePostToLike = date.getTime().toString();
+    this.postToLike.dateEditPostToLike = date.getTime().toString();
+    this.postToLike.datePostEnd = date.getTime().toString();
+    this.postToLike.idUser = this.user.user.uid;
+
+    const modal = await this.modalCtrl.create({
+      component: PrevisualizacionPostModalComponent,
+      componentProps: {
+        postToLike: this.postToLike,
+        user: this.user
+      },
     });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
   }
 }

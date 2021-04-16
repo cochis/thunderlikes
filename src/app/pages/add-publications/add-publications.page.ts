@@ -43,8 +43,6 @@ export class AddPublicationsPage implements OnInit {
 
     this.serviceFb.createDoc(this.postToLike, '/PostToLike', id);
 
-    this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
-      console.log(res);
-    });
+    this.serviceFb.getCollection('/PostToLike');
   }
 }

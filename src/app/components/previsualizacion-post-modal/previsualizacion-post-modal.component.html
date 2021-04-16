@@ -1,0 +1,57 @@
+<ion-card-header>
+  <ion-card-subtitle>
+    <div
+      id="comentsShow"
+      class="fb-comments"
+      data-href=""
+      data-width="100%"
+      data-numposts="1"
+      data-lazy="true"
+      data-mobile="true"
+      data-colorscheme="dark"
+    ></div
+  ></ion-card-subtitle>
+</ion-card-header>
+<ion-card-content style="margin: auto; padding: 0">
+  <div
+    id="postShow"
+    class="fb-post"
+    data-href=""
+    data-width="100%"
+    data-show-text="false"
+  ></div>
+</ion-card-content>
+
+<ion-grid fixed>
+  <ion-row
+    style="
+      margin: auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      background:rgba(255, 255, 255, 0.75);
+      width: 100%;
+    "
+  >
+  <ion-label>Así se mostrara tu publicación, si no se ve verifica que el contenido sea publíco</ion-label>
+    <ion-col style="margin: auto; text-align: center"
+      ><ion-button
+        color="danger"
+        style="padding: 0; width: 150px"
+        (click)="cancelar()"
+        >Cancelar</ion-button
+      ></ion-col
+    >
+    <ion-col style="margin: auto; text-align: center"
+      ><ion-button
+        color="primary"
+        style="padding: 0; width: 150px"
+        (click)="enviar()"
+        >Aceptar</ion-button
+      ></ion-col
+    >
+  </ion-row>
+</ion-grid>

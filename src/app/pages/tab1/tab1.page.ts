@@ -1,26 +1,28 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
-import {
-  UserSign,
-  UserSignData,
-  PostToLike,
-} from '../../interfaces/interfaces';
+import { UserSign } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
-import * as admin from 'firebase-admin';
 import { environment } from '../../../environments/environment.prod';
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
-import { ServicesFirebase } from 'src/app/services/servicesFirebase';
 import { FirebaseService } from '../../services/firebase.service';
 import * as SecureLS from 'secure-ls';
-
+import { IonInfiniteScroll } from '@ionic/angular';
+import { FunctionService } from '../../services/functions';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page {
+  data: any[] = Array(20);
+  @ViewChild(IonInfiniteScroll) inifiteScroll: IonInfiniteScroll;
   userSign: UserSign;
   typeLog: String;
   userSignData: any[] = [];
@@ -28,7 +30,7 @@ export class Tab1Page {
   loginCheck: Boolean = false;
   postToLike: any = [];
   checkNoMore: boolean = false;
-  sum: number = 4;
+  sum: number = 12;
   test = [1, 1];
   lengthPost: number = 0;
   flagPost: Boolean = false;
@@ -56,15 +58,16 @@ export class Tab1Page {
       desc: 'Siempre sabremos donde estás!',
     },
   ];
+
   user: any;
   loadding: Boolean = false;
   inner = '';
-
+  p: number = 1;
+  collection: any[] = [];
   constructor(
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
     private router: Router,
-    private serviceFb: FirebaseService
+    private serviceFb: FirebaseService,
+    private functionService: FunctionService
   ) {
     this.firebaseConfig = environment.firebaseConfig;
     if (!firebase.default.apps.length) {
@@ -74,43 +77,65 @@ export class Tab1Page {
   }
 
   ngOnInit() {
-    console.log('*_* init', this.user);
     this.loadding = true;
-    const auth = firebase.default.auth();
-    const db = firebase.default.database();
-    const fs = firebase.default.firestore();
-    // console.log(this.user);
     if (this.user !== null && this.user !== undefined) {
       var range;
-      // console.log("existe");
-      this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
-        console.log(res);
-        res = this.sort(res);
-        localStorage.setItem('pLoIsKtEtO', JSON.stringify(res));
-        if (!localStorage.getItem('vMeArA')) {
-          range = {
-            init: 0,
-            end: this.sum,
-            checkNoMore: true,
-          };
-        } else {
-          range = JSON.parse(localStorage.getItem('vMeArA'));
-        }
-        this.checkNoMore = range.checkNoMore;
-        localStorage.setItem('vMeArA', JSON.stringify(range));
-        // this.postToLike = res;
+      // this.serviceFb.getCollectionPagination('/PostToLike', 0) ;
 
-        this.flagPost = true;
-        this.cargarPost(range);
+      this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
+        res = this.sort(res);
+        this.postToLike = res;
+        var count = 0;
+        this.charguePost(this.sum);
       });
     } else {
       console.log('no existe');
     }
     this.loadding = false;
   }
-  scriptFB() {
-    // console.log('scripot fb');
+  onPageChange(event) {
+    
+    console.log("cambio de  pagina "+event);
 
+    
+    this.charguePost(this.sum - 1);
+  }
+
+  charguePost(range) {
+    var count = 0;
+    var flag = false;
+
+    setTimeout(() => {
+      if (this.postToLike.length < range) {
+        range = this.postToLike.length;
+      }
+      this.postToLike = this.sort(this.postToLike);
+      for (let i = 0; i < range; i++) {
+        flag = this.postToLike[i].requires.includes('sh');
+        if (flag && document.getElementById('btnShare' + count)) {
+          document
+            .getElementById('btnShare' + count)
+            .setAttribute('data-href', this.postToLike[i].urlPostToLike);
+        }
+        flag = this.postToLike[i].requires.includes('lk');
+        if (flag && document.getElementById('post' + count)) {
+          document
+            .getElementById('post' + count)
+            .setAttribute('data-href', this.postToLike[i].urlPostToLike);
+        }
+        flag = this.postToLike[i].requires.includes('cm');
+        if (flag && document.getElementById('comment' + count)) {
+          document
+            .getElementById('comment' + count)
+            .setAttribute('data-href', this.postToLike[i].urlPostToLike);
+        }
+        ++count;
+      }
+      this.functionService.remove();
+    }, 2000);
+  }
+
+  scriptFB() {
     var script = document.createElement('script');
     script.src =
       'https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1';
@@ -124,16 +149,12 @@ export class Tab1Page {
 
   remove() {
     const scriptList = document.querySelectorAll('script');
-    // console.log('*_* scripts', scriptList);
     const convertedNodeList = Array.from(scriptList);
     const testScript = convertedNodeList.find(
       (script) => script.id === 'headFacebook'
     );
-    // console.log('*_* scripts 2', testScript);
     testScript?.parentNode.removeChild(testScript);
-
     setTimeout(() => {
-      // console.log("integra scripts");
       if (!document.getElementById('headFacebook')) {
         this.scriptFB();
       }
@@ -151,38 +172,25 @@ export class Tab1Page {
     }
   }
   verUser(event) {
-    // console.log(event);
     this.user = event.user;
     this.loadding = false;
     this.userSignData = event.userSignData;
-    // this.router.navigate(['/add-publications']);
-    // console.log(this.user, this.userSignData, this.loadding);
   }
 
   cargarPost(range) {
-    console.log(range);
     this.postToLike = undefined;
     this.postToLike = [];
     var postToLike = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
-
-    console.log(postToLike);
     for (let i = range.init; i < range.end; i++) {
       this.postToLike.push(postToLike[i]);
     }
-    console.log(this.postToLike);
     var count = 0;
-    console.log(range);
     setTimeout(() => {
       for (let i = 0; i < range.end; i++) {
-        // console.log(postToLike[i]);
-        // document.getElementById("postShow" + count).setAttribute("data-href", postToLike[i].urlPostToLike);
-        // console.log(postToLike[i].requires);
-
         if (
           postToLike[i].requires.includes('sh') &&
           document.getElementById('btnShare' + count)
         ) {
-          // console.log('share' + count, postToLike[i].requires.includes('sh'));
           document
             .getElementById('btnShare' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -191,7 +199,6 @@ export class Tab1Page {
           postToLike[i].requires.includes('lk') &&
           document.getElementById('post' + count)
         ) {
-          // console.log('like' + count, postToLike[i].requires.includes('lk'));
           document
             .getElementById('post' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -200,7 +207,6 @@ export class Tab1Page {
           postToLike[i].requires.includes('cm') &&
           document.getElementById('comment' + count)
         ) {
-          // console.log('coment' + count, postToLike[i].requires.includes('cm'));
           document
             .getElementById('comment' + count)
             .setAttribute('data-href', postToLike[i].urlPostToLike);
@@ -214,56 +220,7 @@ export class Tab1Page {
     }, 1000);
   }
 
-  verMas() {
-    var range = JSON.parse(localStorage.getItem('vMeArA'));
-    var post = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
-
-    var checkNoMore = false;
-    // console.log(range);
-    var init = range.init + this.sum;
-
-    if (range.end + this.sum > post.length) {
-      var end = post.length;
-      checkNoMore = false;
-    } else {
-      var end = range.end + this.sum;
-      checkNoMore = true;
-    }
-
-    range = {
-      init: init,
-      end: end,
-      checkNoMore,
-    };
-
-    localStorage.setItem('vMeArA', JSON.stringify(range));
-    // window.location.reload();
-    this.cargarPost(range);
-  }
-  lessPage() {
-    this.postToLike = [];
-    var range = JSON.parse(localStorage.getItem('vMeArA'));
-    var post = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
-
-    var checkNoMore = false;
-    // console.log(range);
-    var init = range.init - this.sum;
-    var end = range.end - this.sum;
-
-    range = {
-      init: init,
-      end: end,
-      checkNoMore,
-    };
-
-    this.cargarPost(range);
-  }
-  ngOnChanges() {
-    var range = JSON.parse(localStorage.getItem('vMeArA'));
-    this.cargarPost(range);
-  }
   sort(elements) {
-    console.log(elements);
     var result;
     result = elements.sort((a, b) =>
       a.dateCreatePostToLike < b.dateCreatePostToLike ? 1 : -1
@@ -272,8 +229,6 @@ export class Tab1Page {
   }
 
   getUser(user) {
-    console.log(user);
-
     if (localStorage.getItem('dUaStEaR')) {
       this.user = JSON.parse(localStorage.getItem('dUaStEaR'));
       var range = {
@@ -282,13 +237,7 @@ export class Tab1Page {
         checkNoMore: true,
       };
       localStorage.setItem('vMeArA', JSON.stringify(range));
-      this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
-        res = this.sort(res);
-        localStorage.setItem('pLoIsKtEtO', JSON.stringify(res));
-        setTimeout(() => {
-          this.cargarPost(range);
-        }, 500);
-      });
+      this.serviceFb.getCollectionPagination('/PostToLike', 0);
     } else {
       this.user = user.user;
     }
@@ -302,41 +251,56 @@ export class Tab1Page {
   }
 
   doRefresh(event) {
-    var dUaStEaR;
-    var pLoIsKtEtO;
-    if (localStorage.getItem('dUaStEaR')) {
-      dUaStEaR = JSON.parse(localStorage.getItem('dUaStEaR'));
-    }
-    if (localStorage.getItem('dUaStEaR')) {
-      pLoIsKtEtO = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
-    }
-    localStorage.clear();
-    if (pLoIsKtEtO !== null) {
-      localStorage.setItem('pLoIsKtEtO', JSON.stringify(pLoIsKtEtO));
-    }
-    if (dUaStEaR !== null) {
-      localStorage.setItem('dUaStEaR', JSON.stringify(dUaStEaR));
-    }
-    if (localStorage.getItem('vMeArA')) {
-      localStorage.removeItem('vMeArA');
-    }
-    var range = {
-      init: 0,
-      end: this.sum,
-      checkNoMore: true,
-    };
-    localStorage.setItem('vMeArA', JSON.stringify(range));
+    // var dUaStEaR;
+    // var pLoIsKtEtO;
+    // if (localStorage.getItem('dUaStEaR')) {
+    //   dUaStEaR = JSON.parse(localStorage.getItem('dUaStEaR'));
+    // }
+    // if (localStorage.getItem('dUaStEaR')) {
+    //   pLoIsKtEtO = JSON.parse(localStorage.getItem('pLoIsKtEtO'));
+    // }
+    // localStorage.clear();
+    // if (pLoIsKtEtO !== null) {
+    //   localStorage.setItem('pLoIsKtEtO', JSON.stringify(pLoIsKtEtO));
+    // }
+    // if (dUaStEaR !== null) {
+    //   localStorage.setItem('dUaStEaR', JSON.stringify(dUaStEaR));
+    // }
+    // if (localStorage.getItem('vMeArA')) {
+    //   localStorage.removeItem('vMeArA');
+    // }
+    // var range = {
+    //   init: 0,
+    //   end: this.sum,
+    //   checkNoMore: true,
+    // };
+    // localStorage.setItem('vMeArA', JSON.stringify(range));
 
-    this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
-      res = this.sort(res);
-      localStorage.setItem('pLoIsKtEtO', JSON.stringify(res));
-      setTimeout(() => {
-        this.cargarPost(range);
-      }, 500);
-    });
+    // this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
+    //   res = this.sort(res);
+    //   localStorage.setItem('pLoIsKtEtO', JSON.stringify(res));
+    //   setTimeout(() => {
+    //     this.cargarPost(range);
+    //   }, 500);
+    // });
 
     setTimeout(() => {
       event.target.complete();
     }, 2000);
   }
+
+  loadData(event) {
+    setTimeout(() => {
+      if (this.postToLike.length > 1000) {
+        this.inifiteScroll.complete();
+        this.inifiteScroll.disabled = true;
+        return;
+      }
+      const nuevoArr = Array(20);
+      this.postToLike.push(...nuevoArr);
+      this.inifiteScroll.complete();
+    }, 1500);
+  }
+ 
+
 }

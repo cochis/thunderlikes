@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+ 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -23,7 +24,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
             ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
             AngularFireModule.initializeApp(environment.firebaseConfig),
             AngularFireDatabaseModule,
-            AngularFireAuthModule
+            AngularFireAuthModule,
+             
           ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

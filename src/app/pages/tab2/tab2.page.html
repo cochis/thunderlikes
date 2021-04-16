@@ -2,8 +2,8 @@
 
 <ion-content [fullscreen]="true">
   <app-segments></app-segments>
-  <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
-    <ion-item>
+  <form #formulario="ngForm" (ngSubmit)="mostrarModal()">
+    <ion-item style="display: none;">
       <ion-label>Usuario:</ion-label>
       <ion-input
         type="text"
@@ -14,7 +14,17 @@
         readonly
       ></ion-input>
     </ion-item>
-
+    <ion-item>
+      <ion-label>Usuario:</ion-label>
+      <ion-input
+        type="text"
+        placeholder="Nombre"
+        name="nameUser"
+        [(ngModel)]="postToLike.nameUser"
+        required
+        readonly
+      ></ion-input>
+    </ion-item>
     <ion-item>
       <ion-label>Plataforma:</ion-label>
       <ion-select

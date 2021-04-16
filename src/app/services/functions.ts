@@ -31,12 +31,58 @@ export class FunctionService {
     return timeDate;
   }
   remove() {
-    const scriptList = document.querySelectorAll('script');
+    if (document.getElementById('headFacebook')) {
+      var element = document.getElementById('headFacebook');
+      console.log(element);
+      if (element) {
+        console.log('elimino');
+
+        element.parentNode.removeChild(element);
+      } else {
+        console.log('undefined');
+      }
+
+      setTimeout(() => {
+        console.log('integra scripts');
+        if (!document.getElementById('headFacebook')) {
+          this.addFacebook();
+        }
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        console.log('integra scripts');
+        if (!document.getElementById('headFacebook')) {
+          this.addFacebook();
+        }
+      }, 1000);
+    }
+
+    // const scriptList = document.querySelectorAll('script');
     // console.log('*_* scripts', scriptList);
-    const convertedNodeList = Array.from(scriptList);
-    const testScript = convertedNodeList.find(
-      (script) => script.id === 'headFacebook'
-    );
-    testScript?.parentNode.removeChild(testScript);
+    // const convertedNodeList = Array.from(scriptList);
+    // const testScript = convertedNodeList.find(
+    //   (script) => script.id === 'headFacebook'
+    // );
+    // console.log('*_* scripts 2', testScript);
+    // testScript?.parentNode.removeChild(testScript);
+    // console.log('*_* scripts 3', testScript);
+    // setTimeout(() => {
+    //   console.log('integra scripts');
+    //   if (!document.getElementById('headFacebook')) {
+    //     this.addFacebook();
+    //   }
+    // }, 5000);
+  }
+
+  addFacebook() {
+    var script = document.createElement('script');
+    script.src =
+      'https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v10.0&appId=252220469914921&autoLogAppEvents=1';
+    script.async = true;
+    script.defer = true;
+    script.id = 'headFacebook';
+    script.nonce = 'n4VHesYa';
+    console.log('*_* addFacebook', script);
+    document.head.appendChild(script);
   }
 }

@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingComponent } from './loading/loading.component';
 import { FunctionService } from '../services/functions';
 import { ServicesFirebase } from '../services/servicesFirebase';
+import { PrevisualizacionPostModalComponent } from './previsualizacion-post-modal/previsualizacion-post-modal.component';
 
 
 @NgModule({
@@ -17,14 +18,16 @@ import { ServicesFirebase } from '../services/servicesFirebase';
     SegmentsComponent,
     LoggerComponent,
     FormUserComponent,
-    LoadingComponent
+    LoadingComponent,
+    PrevisualizacionPostModalComponent
   ],
   exports: [
     HeaderComponent,
     SegmentsComponent,
     LoggerComponent,
     FormUserComponent,
-    LoadingComponent
+    LoadingComponent,
+    PrevisualizacionPostModalComponent
   ],
   imports: [
     CommonModule,
