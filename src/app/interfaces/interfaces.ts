@@ -40,3 +40,9 @@ export interface UserLogin {
     email: string;
     password: string;
   }
+  export interface Parameters {
+    active: boolean;
+    code: string;
+    type: string;
+    value: string;
+  }

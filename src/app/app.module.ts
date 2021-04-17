@@ -25,6 +25,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
             AngularFireModule.initializeApp(environment.firebaseConfig),
             AngularFireDatabaseModule,
             AngularFireAuthModule,
+        
              
           ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

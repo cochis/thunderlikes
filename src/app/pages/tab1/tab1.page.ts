@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
-import { UserSign } from '../../interfaces/interfaces';
+import { Parameters, UserSign } from '../../interfaces/interfaces';
 import * as firebase from 'firebase';
 import { environment } from '../../../environments/environment.prod';
 import { Router } from '@angular/router';
@@ -30,7 +30,7 @@ export class Tab1Page {
   loginCheck: Boolean = false;
   postToLike: any = [];
   checkNoMore: boolean = false;
-  sum: number = 12;
+  sum: number ;
   test = [1, 1];
   lengthPost: number = 0;
   flagPost: Boolean = false;
@@ -80,8 +80,14 @@ export class Tab1Page {
     this.loadding = true;
     if (this.user !== null && this.user !== undefined) {
       var range;
-      // this.serviceFb.getCollectionPagination('/PostToLike', 0) ;
 
+      this.serviceFb.getDoc("/PtAhRnAdMeEsTlEiRkSe", environment.numberItems).subscribe((res:Parameters) => {
+        console.log(res);
+        this.sum = Number(res.value);
+      },
+        (err) => {
+          console.log(err);
+        })
       this.serviceFb.getCollection('/PostToLike').subscribe((res) => {
         res = this.sort(res);
         this.postToLike = res;
@@ -94,10 +100,10 @@ export class Tab1Page {
     this.loadding = false;
   }
   onPageChange(event) {
-    
-    console.log("cambio de  pagina "+event);
 
-    
+    console.log("cambio de  pagina " + event);
+    // this.remove();
+
     this.charguePost(this.sum - 1);
   }
 
@@ -131,7 +137,7 @@ export class Tab1Page {
         }
         ++count;
       }
-      this.functionService.remove();
+      // this.functionService.remove();
     }, 2000);
   }
 
@@ -154,11 +160,6 @@ export class Tab1Page {
       (script) => script.id === 'headFacebook'
     );
     testScript?.parentNode.removeChild(testScript);
-    setTimeout(() => {
-      if (!document.getElementById('headFacebook')) {
-        this.scriptFB();
-      }
-    }, 2000);
   }
 
   onClick() {
@@ -215,8 +216,8 @@ export class Tab1Page {
         ++count;
       }
 
-      this.eliminarHeadFacebook();
-      this.remove();
+      // this.eliminarHeadFacebook();
+      // this.remove();
     }, 1000);
   }
 
@@ -301,6 +302,6 @@ export class Tab1Page {
       this.inifiteScroll.complete();
     }, 1500);
   }
- 
+
 
 }
