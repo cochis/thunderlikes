@@ -5,83 +5,48 @@
   <form #formulario="ngForm" (ngSubmit)="mostrarModal()">
     <ion-item style="display: none;">
       <ion-label>Usuario:</ion-label>
-      <ion-input
-        type="text"
-        placeholder="Usuario"
-        name="idUser"
-        [(ngModel)]="postToLike.idUser"
-        required
-        readonly
-      ></ion-input>
+      <ion-input type="text" placeholder="Usuario" name="idUser" [(ngModel)]="postToLike.idUser" required readonly>
+      </ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Usuario:</ion-label>
-      <ion-input
-        type="text"
-        placeholder="Nombre"
-        name="nameUser"
-        [(ngModel)]="postToLike.nameUser"
-        required
-        readonly
-      ></ion-input>
+      <ion-input type="text" placeholder="Nombre" name="nameUser" [(ngModel)]="postToLike.nameUser" required readonly>
+      </ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Plataforma:</ion-label>
-      <ion-select
-        placeholder="Select One"
-        name="idPlattform"
-        [(ngModel)]="postToLike.idPlattform"
-        required
+      <ion-select placeholder="Select One" name="idPlattform" [(ngModel)]="postToLike.idPlattform" required>
+      <b  *ngFor="let item of plattform" >
+        <ion-select-option value="{{item.code}}" *ngIf="item.active">{{item.value}}</ion-select-option>
+      </b> 
        
-      >
-        <ion-select-option  *ngFor="let item of plattform"   value="{{item.code}}"
-          >{{item.value}}</ion-select-option>
-        <!-- <ion-select-option value="yt">Youtube</ion-select-option>
-        <ion-select-option value="ig">Instagram</ion-select-option> -->
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label>Requerimientos:</ion-label>
       <!-- Checkbox Colors -->
-      <ion-select
-        multiple="true"
-        cancelText="Cancelar"
-        okText="Aceptar"
-        name="requires"
-        [(ngModel)]="postToLike.requires"
-        required
-      >
-        <ion-select-option  *ngFor="let item of requires"    value="{{item.code}}">{{item.value}}</ion-select-option>
-        <!-- <ion-select-option value="cm">Comentar</ion-select-option>
-        <ion-select-option value="sh">Compartir</ion-select-option> -->
+      <ion-select multiple="true" cancelText="Cancelar" okText="Aceptar" name="requires"
+        [(ngModel)]="postToLike.requires" required>
+        <b *ngFor="let item of requires">
+          <ion-select-option value="{{item.code}}" *ngIf="item.active">{{item.value}}</ion-select-option>
+        </b>
+
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>URL:</ion-label>
-      <ion-input
-        type="url"
-        placeholder="Dirección"
-        name="urlPostToLike"
-        [(ngModel)]="postToLike.urlPostToLike"
-        required
-      ></ion-input>
+      <ion-input type="url" placeholder="Dirección" name="urlPostToLike" [(ngModel)]="postToLike.urlPostToLike"
+        required></ion-input>
     </ion-item>
 
-    <div
-      style="
+    <div style="
         position: -webkit-sticky;
         position: sticky;
         bottom: 0;
         border-color: red;
-      "
-    >
-      <ion-button
-        slot="bottom"
-        [disabled]="formulario.invalid"
-        type="submit"
-        expand="block"
-      >
+      ">
+      <ion-button slot="bottom" [disabled]="formulario.invalid" type="submit" expand="block">
         Enviar
       </ion-button>
     </div>

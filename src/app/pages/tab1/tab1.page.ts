@@ -102,7 +102,7 @@ export class Tab1Page {
   onPageChange(event) {
 
     console.log("cambio de  pagina " + event);
-    // this.remove();
+    this.remove();
 
     this.charguePost(this.sum - 1);
   }
@@ -137,7 +137,7 @@ export class Tab1Page {
         }
         ++count;
       }
-      // this.functionService.remove();
+      this.functionService.remove();
     }, 2000);
   }
 
@@ -216,8 +216,8 @@ export class Tab1Page {
         ++count;
       }
 
-      // this.eliminarHeadFacebook();
-      // this.remove();
+      this.eliminarHeadFacebook();
+      this.remove();
     }, 1000);
   }
 
